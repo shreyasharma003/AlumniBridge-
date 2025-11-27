@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Signup Test - Error Debugging</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        background: #f5f5f5;
+      }
+      .container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+      }
+      .form-section {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      .console-section {
+        background: #1e1e1e;
+        color: #00ff00;
+        padding: 20px;
+        border-radius: 8px;
+        font-family: "Courier New", monospace;
+        font-size: 12px;
+        overflow-y: auto;
+        max-height: 600px;
+      }
+      input,
+      select,
+      textarea {
+        width: 100%;
+        padding: 10px;
+        margin: 5px 0 15px 0;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+      }
+      button {
+        background: #3d7cb8;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+      }
+      button:hover {
+        background: #2c5aa0;
+      }
+      h2 {
+        margin-top: 0;
+        color: #333;
+      }
+      .log-entry {
+        margin-bottom: 10px;
+        padding: 5px;
+        border-left: 3px solid #00ff00;
+        padding-left: 10px;
+      }
+      .log-error {
+        border-left-color: #ff0000;
+        color: #ff6b6b;
+      }
+      .log-success {
+        border-left-color: #00ff00;
+      }
+      .log-info {
+        border-left-color: #ffff00;
+        color: #ffff00;
+      }
+      .clear-btn {
+        background: #666;
+        margin-top: 10px;
+        width: 100%;
+      }
+      .clear-btn:hover {
+        background: #555;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Signup Form - Error Debugging</h1>
+    <div class="container">
+      <div class="form-section">
+        <h2>Signup Form</h2>
+        <form id="signupForm">
+          <input type="text" id="name" placeholder="Full Name" required />
+          <input type="email" id="email" placeholder="Email" required />
+          <input
+            type="password"
+            id="password"
+            placeholder="Password"
+            required
+          />
+          <input
+            type="password"
+            id="confirmPassword"
+            placeholder="Confirm Password"
+            required
+          />
+          <select id="role" required>
+            <option value="">Select Role</option>
+            <option value="STUDENT">Student</option>
+            <option value="ALUMNI">Alumni</option>
+          </select>
+          <input
+            type="text"
+            id="institute"
+            placeholder="Institute Name"
+            required
+          />
+          <input
+            type="number"
+            id="batchYear"
+            placeholder="Batch Year (e.g., 2024)"
+            required
+          />
+          <select id="degreeName" required>
+            <option value="">Select Degree</option>
+            <option value="BTech">BTech</option>
+            <option value="BCA">BCA</option>
+            <option value="BBA">BBA</option>
+            <option value="MBA">MBA</option>
+            <option value="MCA">MCA</option>
+          </select>
+          <textarea
+            id="bio"
+            placeholder="Bio (optional)"
+            style="resize: vertical; height: 80px"
+          ></textarea>
+          <input
+            type="url"
+            id="linkedinUrl"
+            placeholder="LinkedIn URL (optional)"
+          />
+          <button type="submit">Sign Up</button>
+        </form>
+      </div>
+
+      <div class="console-section">
+        <h2 style="margin-top: 0; color: #00ff00">Console Output</h2>
+        <div id="console"></div>
+        <button class="clear-btn" onclick="clearConsole()">
+          Clear Console
+        </button>
+      </div>
+    </div>
+
+    <script>
+      // Capture console logs
+      const consoleDiv = document.getElementById("console");
+      const originalLog = console.log;
+      const originalError = console.error;
+
+      function addLog(message, type = "info") {
+        const entry = document.createElement("div");
+        entry.className = `log-entry log-${type}`;
+
+        if (typeof message === "object") {
+          entry.textContent = JSON.stringify(message, null, 2);
+        } else {
+          entry.textContent = String(message);
+        }
+
+        consoleDiv.appendChild(entry);
+        consoleDiv.scrollTop = consoleDiv.scrollHeight;
+      }
+
+      console.log = function (...args) {
+        originalLog.apply(console, args);
+        args.forEach((arg) => addLog(arg, "info"));
+      };
+
+      console.error = function (...args) {
+        originalError.apply(console, args);
+        args.forEach((arg) => addLog(arg, "error"));
+      };
+
+      function clearConsole() {
+        consoleDiv.innerHTML = "";
+      }
+
+      // API Call with enhanced error handling
+      async function apiCall(endpoint, method = "GET", data = null) {
+        const url = `http://localhost:8080${endpoint}`;
+        console.log(`🔹 API Call: ${method} ${endpoint}`);
+
+        try {
+          const options = {
+            method: method,
+            headers: {
+              "Content-Type": "application/json",
+            },
+          };
+
+          if (data) {
+            options.body = JSON.stringify(data);
+            console.log("📤 Request Data:", data);
+          }
+
+          const response = await fetch(url, options);
+          console.log(
+            `📊 Response Status: ${response.status} ${response.statusText}`
+          );
+
+          const text = await response.text();
+          console.log(`📋 Response Body:`, text);
+
+          let responseData = {};
+          try {
+            responseData = JSON.parse(text);
+          } catch (e) {
+            console.error("❌ Failed to parse response as JSON");
+            responseData = { rawText: text };
+          }
+
+          if (!response.ok) {
+            const error = {
+              status: response.status,
+              statusText: response.statusText,
+              data: responseData,
+              message:
+                responseData.message || responseData.error || "Unknown error",
+            };
+            console.error("❌ API Error:", error);
+            throw error;
+          }
+
+          console.log("✅ API Success:", responseData);
+          return responseData;
+        } catch (error) {
+          console.error("💥 Exception Caught:", {
+            message: error.message,
+            stack: error.stack,
+            error: error,
+          });
+          throw error;
+        }
+      }
+
+      // Handle signup form submission
+      document
+        .getElementById("signupForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          console.log("▶️ Form submission started");
+
+          const password = document.getElementById("password").value;
+          const confirmPassword =
+            document.getElementById("confirmPassword").value;
+
+          if (password !== confirmPassword) {
+            console.error("❌ Passwords do not match!");
+            return;
+          }
+
+          const formData = {
+            name: document.getElementById("name").value,
+            email: document.getElementById("email").value,
+            password: document.getElementById("password").value,
+            role: document.getElementById("role").value,
+            institute: document.getElementById("institute").value,
+            batchYear: parseInt(document.getElementById("batchYear").value),
+            degreeName: document.getElementById("degreeName").value,
+            bio: document.getElementById("bio").value || null,
+            linkedinUrl: document.getElementById("linkedinUrl").value || null,
+          };
+
+          console.log("📝 Form Data to Send:", formData);
+
+          try {
+            const result = await apiCall(
+              "/api/auth/register",
+              "POST",
+              formData
+            );
+            console.log("🎉 Signup successful!", result);
+            alert("Signup successful!");
+          } catch (error) {
+            console.error("❌ Signup failed");
+          }
+        });
+
+      // Initial message
+      console.log(
+        "🚀 Test page loaded. Fill the form and click Sign Up to debug."
+      );
+      console.log("📍 Backend URL: http://localhost:8080");
+      console.log("📍 Endpoint: /api/auth/register");
+    </script>
+  </body>
+</html>

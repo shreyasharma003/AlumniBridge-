@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Alumni Dashboard - Alumni Bridge</title>
+    <link rel="stylesheet" href="../css/professional.css" />
+    <style>
+      body {
+        background-color: var(--bg-light);
+        padding: 20px;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .header {
+        background: white;
+        padding: 20px 30px;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        margin-bottom: 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .header h1 {
+        color: #333;
+        font-size: 24px;
+      }
+
+      .user-info {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+
+      .user-info span {
+        color: #666;
+        font-size: 14px;
+      }
+
+      .logout-btn {
+        background: #ff6b6b;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: background 0.3s;
+      }
+
+      .logout-btn:hover {
+        background: #ee5a52;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 20px;
+        margin-bottom: 30px;
+      }
+
+      .card {
+        background: white;
+        padding: 25px;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s, box-shadow 0.3s;
+      }
+
+      .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+      }
+
+      .card h2 {
+        color: #f5576c;
+        margin-bottom: 15px;
+        font-size: 18px;
+      }
+
+      .card p {
+        color: #666;
+        line-height: 1.6;
+        margin-bottom: 15px;
+      }
+
+      .card-btn {
+        background: #f5576c;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        width: 100%;
+        font-size: 14px;
+        transition: background 0.3s;
+      }
+
+      .card-btn:hover {
+        background: #dd4d5e;
+      }
+
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 15px;
+        margin-bottom: 30px;
+      }
+
+      .stat-box {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        text-align: center;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .stat-number {
+        font-size: 32px;
+        font-weight: bold;
+        color: #f5576c;
+      }
+
+      .stat-label {
+        color: #666;
+        font-size: 14px;
+        margin-top: 5px;
+      }
+
+      .error {
+        background: #ff6b6b;
+        color: white;
+        padding: 15px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+      }
+
+      .success {
+        background: #51cf66;
+        color: white;
+        padding: 15px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>Alumni Dashboard</h1>
+        <div class="user-info">
+          <span id="userEmail">Email</span>
+          <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+      </div>
+
+      <div id="message"></div>
+
+      <div class="stats">
+        <div class="stat-box">
+          <div class="stat-number" id="eventCount">0</div>
+          <div class="stat-label">Hosted Events</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-number" id="connectionCount">0</div>
+          <div class="stat-label">Your Network</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-number" id="mentorCount">0</div>
+          <div class="stat-label">Mentees</div>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="card">
+          <h2>Profile</h2>
+          <p>
+            Update your professional profile and career achievements to inspire
+            upcoming graduates.
+          </p>
+          <button class="card-btn" onclick="navigateTo('profile.html')">
+            View Profile
+          </button>
+        </div>
+
+        <div class="card">
+          <h2>Host Event</h2>
+          <p>
+            Create and host networking events, workshops, or mentoring sessions
+            for the alumni community.
+          </p>
+          <button class="card-btn" onclick="navigateTo('host-event.html')">
+            Create Event
+          </button>
+        </div>
+
+        <div class="card">
+          <h2>Mentoring</h2>
+          <p>
+            Guide and mentor students and recent graduates in their career
+            journey.
+          </p>
+          <button class="card-btn" onclick="navigateTo('mentoring.html')">
+            Mentor Now
+          </button>
+        </div>
+
+        <div class="card">
+          <h2>Network</h2>
+          <p>
+            Connect with fellow alumni and expand your professional
+            opportunities.
+          </p>
+          <button class="card-btn" onclick="navigateTo('network.html')">
+            Browse Network
+          </button>
+        </div>
+
+        <div class="card">
+          <h2>Connections</h2>
+          <p>
+            Manage your connection requests and active connections with other
+            members.
+          </p>
+          <button class="card-btn" onclick="navigateTo('connections.html')">
+            View Connections
+          </button>
+        </div>
+
+        <div class="card">
+          <h2>Messages</h2>
+          <p>Stay in touch with other alumni and collaborate on projects.</p>
+          <button class="card-btn" onclick="navigateTo('chat.html')">
+            Open Chat
+          </button>
+        </div>
+
+        <div class="card">
+          <h2>Batch Directory</h2>
+          <p>View all members of your batch and reconnect with old friends.</p>
+          <button class="card-btn" onclick="navigateTo('batches.html')">
+            View Directory
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script src="../js/api.js"></script>
+    <script>
+      // Initialize dashboard
+      document.addEventListener("DOMContentLoaded", function () {
+        checkAuth();
+        loadDashboardData();
+        displayUserInfo();
+      });
+
+      function checkAuth() {
+        const token = localStorage.getItem("token");
+        const userRole = localStorage.getItem("userRole");
+
+        if (!token || userRole !== "ALUMNI") {
+          window.location.href = "login.html";
+        }
+      }
+
+      function displayUserInfo() {
+        const userEmail = localStorage.getItem("userEmail");
+        if (userEmail) {
+          document.getElementById("userEmail").textContent = userEmail;
+        }
+      }
+
+      function loadDashboardData() {
+        // Load user profile
+        loadUserProfile();
+        // Load events
+        loadEvents();
+        // Load user stats
+        loadUserStats();
+      }
+
+      async function loadUserProfile() {
+        try {
+          const userData = await getUserMe();
+          console.log("User data:", userData);
+          // Update user info if needed
+        } catch (error) {
+          console.error("Failed to load user profile:", error);
+        }
+      }
+
+      async function loadEvents() {
+        try {
+          const events = await apiCall("/events/", { method: "GET" });
+          console.log("Events:", events);
+
+          if (events && events.length > 0) {
+            document.getElementById("eventCount").textContent = events.length;
+          }
+        } catch (error) {
+          console.error("Failed to load events:", error);
+        }
+      }
+
+      async function loadUserStats() {
+        try {
+          // These will be populated with actual data from backend once we have the endpoints
+          document.getElementById("connectionCount").textContent = "0";
+          document.getElementById("mentorCount").textContent = "0";
+        } catch (error) {
+          console.error("Failed to load stats:", error);
+        }
+      }
+
+      function navigateTo(page) {
+        window.location.href = page;
+      }
+
+      function logout() {
+        localStorage.removeItem("token");
+        localStorage.removeItem("userId");
+        localStorage.removeItem("userRole");
+        localStorage.removeItem("userEmail");
+        window.location.href = "login.html";
+      }
+
+      function showMessage(message, type = "success") {
+        const messageDiv = document.getElementById("message");
+        messageDiv.textContent = message;
+        messageDiv.className = type;
+        setTimeout(() => {
+          messageDiv.textContent = "";
+          messageDiv.className = "";
+        }, 3000);
+      }
+    </script>
+  </body>
+</html>

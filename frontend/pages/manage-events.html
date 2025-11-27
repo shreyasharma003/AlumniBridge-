@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Manage Events - Alumni Bridge Admin</title>
+    <link rel="stylesheet" href="../css/professional.css" />
+    <style>
+      body {
+        background-color: var(--bg-light);
+        padding: 20px;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .header {
+        background: white;
+        padding: 20px 30px;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        margin-bottom: 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .header h1 {
+        color: #333;
+        font-size: 28px;
+      }
+
+      .back-btn {
+        background: #667eea;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: background 0.3s;
+      }
+
+      .back-btn:hover {
+        background: #5568d3;
+      }
+
+      .content {
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        gap: 30px;
+        margin-bottom: 30px;
+      }
+
+      .form-section {
+        background: white;
+        padding: 25px;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        height: fit-content;
+      }
+
+      .form-section h2 {
+        color: #333;
+        margin-bottom: 20px;
+        font-size: 20px;
+      }
+
+      .form-group {
+        margin-bottom: 15px;
+      }
+
+      .form-group label {
+        display: block;
+        color: #555;
+        font-weight: 500;
+        margin-bottom: 5px;
+        font-size: 14px;
+      }
+
+      .form-group input,
+      .form-group textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-family: inherit;
+        font-size: 14px;
+      }
+
+      .form-group textarea {
+        resize: vertical;
+        min-height: 80px;
+      }
+
+      .form-group input:focus,
+      .form-group textarea:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+      }
+
+      .form-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 20px;
+      }
+
+      .btn {
+        flex: 1;
+        padding: 12px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 500;
+        transition: all 0.3s;
+      }
+
+      .btn-primary {
+        background: #667eea;
+        color: white;
+      }
+
+      .btn-primary:hover {
+        background: #5568d3;
+      }
+
+      .btn-secondary {
+        background: #e0e0e0;
+        color: #333;
+      }
+
+      .btn-secondary:hover {
+        background: #d0d0d0;
+      }
+
+      .events-section {
+        background: white;
+        padding: 25px;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .events-section h2 {
+        color: #333;
+        margin-bottom: 20px;
+        font-size: 20px;
+      }
+
+      .search-box {
+        margin-bottom: 20px;
+      }
+
+      .search-box input {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 14px;
+      }
+
+      .events-list {
+        display: grid;
+        gap: 15px;
+      }
+
+      .event-card {
+        background: #f9f9f9;
+        padding: 15px;
+        border-radius: 8px;
+        border-left: 4px solid #667eea;
+        display: flex;
+        justify-content: space-between;
+        align-items: start;
+        transition: all 0.3s;
+      }
+
+      .event-card:hover {
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .event-info h3 {
+        color: #333;
+        margin-bottom: 5px;
+        font-size: 16px;
+      }
+
+      .event-info p {
+        color: #666;
+        font-size: 13px;
+        margin-bottom: 3px;
+      }
+
+      .event-actions {
+        display: flex;
+        gap: 10px;
+      }
+
+      .btn-sm {
+        padding: 6px 12px;
+        font-size: 12px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+
+      .btn-edit {
+        background: #4caf50;
+        color: white;
+      }
+
+      .btn-edit:hover {
+        background: #45a049;
+      }
+
+      .btn-delete {
+        background: #f44336;
+        color: white;
+      }
+
+      .btn-delete:hover {
+        background: #da190b;
+      }
+
+      .message {
+        padding: 12px;
+        margin-bottom: 20px;
+        border-radius: 5px;
+        display: none;
+      }
+
+      .message.success {
+        background: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+        display: block;
+      }
+
+      .message.error {
+        background: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+        display: block;
+      }
+
+      .empty-state {
+        text-align: center;
+        padding: 40px 20px;
+        color: #999;
+      }
+
+      .empty-state p {
+        font-size: 16px;
+        margin-bottom: 10px;
+      }
+
+      @media (max-width: 768px) {
+        .content {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- Header -->
+      <div class="header">
+        <h1>Manage Events</h1>
+        <button class="back-btn" onclick="goBack()">← Back to Dashboard</button>
+      </div>
+
+      <!-- Message -->
+      <div id="message" class="message"></div>
+
+      <!-- Content Grid -->
+      <div class="content">
+        <!-- Form Section -->
+        <div class="form-section">
+          <h2 id="formTitle">Create New Event</h2>
+          <form id="eventForm">
+            <div class="form-group">
+              <label for="title">Event Title *</label>
+              <input
+                type="text"
+                id="title"
+                required
+                placeholder="e.g., Alumni Meet 2025"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="description">Description *</label>
+              <textarea
+                id="description"
+                required
+                placeholder="Event details..."
+              ></textarea>
+            </div>
+
+            <div class="form-group">
+              <label for="eventDate">Date *</label>
+              <input type="date" id="eventDate" required />
+            </div>
+
+            <div class="form-group">
+              <label for="eventTime">Time *</label>
+              <input type="time" id="eventTime" required />
+            </div>
+
+            <div class="form-group">
+              <label for="location">Location *</label>
+              <input
+                type="text"
+                id="location"
+                required
+                placeholder="Event venue"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="capacity">Capacity *</label>
+              <input
+                type="number"
+                id="capacity"
+                required
+                min="1"
+                placeholder="Max attendees"
+              />
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary">Save Event</button>
+              <button
+                type="reset"
+                class="btn btn-secondary"
+                onclick="resetForm()"
+              >
+                Clear
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Events List Section -->
+        <div class="events-section">
+          <h2>All Events</h2>
+          <div class="search-box">
+            <input
+              type="text"
+              id="searchInput"
+              placeholder="Search events by title..."
+              onkeyup="filterEvents()"
+            />
+          </div>
+          <div id="eventsList" class="events-list">
+            <div class="empty-state">
+              <p>Loading events...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="../js/api.js"></script>
+    <script>
+      let allEvents = [];
+      let editingEventId = null;
+
+      // Initialize
+      document.addEventListener("DOMContentLoaded", () => {
+        checkAuth();
+        loadEvents();
+        document
+          .getElementById("eventForm")
+          .addEventListener("submit", handleFormSubmit);
+      });
+
+      function checkAuth() {
+        const token = localStorage.getItem("token");
+        const role = localStorage.getItem("userRole");
+        const userId = localStorage.getItem("userId");
+
+        console.log("🔐 Auth Check:");
+        console.log("  Token:", token ? "Present" : "MISSING");
+        console.log("  Role:", role || "MISSING");
+        console.log("  UserId:", userId || "MISSING");
+
+        if (!token || role !== "ADMIN") {
+          console.error(
+            "❌ Not authenticated as ADMIN. Redirecting to login..."
+          );
+          window.location.href = "../pages/login.html";
+        }
+      }
+
+      async function loadEvents() {
+        try {
+          const token = getAuthToken();
+          console.log("📥 Loading events...");
+          console.log("  Token present:", !!token);
+
+          const response = await fetch("http://localhost:8080/api/events/", {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          });
+
+          console.log("📊 Response Status:", response.status);
+          const responseText = await response.text();
+          console.log("📋 Response Body:", responseText);
+
+          if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+          }
+
+          allEvents = responseText ? JSON.parse(responseText) : [];
+          console.log("✅ Events loaded:", allEvents.length, "events");
+          displayEvents();
+        } catch (error) {
+          console.error("❌ Failed to load events:", error);
+          showMessage("Failed to load events: " + error.message, "error");
+        }
+      }
+
+      function displayEvents() {
+        const eventsList = document.getElementById("eventsList");
+
+        if (!allEvents || allEvents.length === 0) {
+          eventsList.innerHTML =
+            '<div class="empty-state"><p>No events created yet</p></div>';
+          return;
+        }
+
+        eventsList.innerHTML = allEvents
+          .map((event) => {
+            // Handle both eventDate/eventTime and startAt formats
+            let dateStr = "";
+            let timeStr = "";
+
+            if (event.eventDate && event.eventTime) {
+              dateStr = event.eventDate;
+              timeStr = event.eventTime;
+            } else if (event.startAt) {
+              const startDate = new Date(event.startAt);
+              dateStr = startDate.toISOString().split("T")[0]; // YYYY-MM-DD
+              timeStr = startDate.toTimeString().split(" ")[0].slice(0, 5); // HH:mm
+            }
+
+            return `
+                    <div class="event-card">
+                        <div class="event-info">
+                            <h3>${escapeHtml(event.title)}</h3>
+                            <p><strong>Date:</strong> ${formatDate(dateStr)}</p>
+                            <p><strong>Time:</strong> ${timeStr}</p>
+                            <p><strong>Location:</strong> ${escapeHtml(
+                              event.location
+                            )}</p>
+                            <p><strong>Capacity:</strong> ${
+                              event.capacity
+                            } attendees</p>
+                        </div>
+                        <div class="event-actions">
+                            <button class="btn-sm btn-edit" onclick="editEvent(${
+                              event.id
+                            })">Edit</button>
+                            <button class="btn-sm btn-delete" onclick="deleteEvent(${
+                              event.id
+                            })">Delete</button>
+                        </div>
+                    </div>
+                `;
+          })
+          .join("");
+      }
+
+      async function handleFormSubmit(e) {
+        e.preventDefault();
+
+        const eventData = {
+          title: document.getElementById("title").value,
+          description: document.getElementById("description").value,
+          eventDate: document.getElementById("eventDate").value,
+          eventTime: document.getElementById("eventTime").value,
+          location: document.getElementById("location").value,
+          capacity: parseInt(document.getElementById("capacity").value),
+        };
+
+        const token = getAuthToken();
+        console.log("📤 Event Data:", eventData);
+        console.log("🔑 Token:", token ? "Present" : "Missing");
+
+        try {
+          if (editingEventId) {
+            // Update existing event
+            const response = await fetch(
+              `http://localhost:8080/api/events/${editingEventId}`,
+              {
+                method: "PUT",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify(eventData),
+              }
+            );
+
+            console.log("📊 Response Status:", response.status);
+            const responseText = await response.text();
+            console.log("📋 Response Body:", responseText);
+
+            if (!response.ok) {
+              try {
+                const errorData = JSON.parse(responseText);
+                throw new Error(
+                  errorData.message ||
+                    `HTTP ${response.status}: ${response.statusText}`
+                );
+              } catch (e) {
+                throw new Error(
+                  responseText ||
+                    `HTTP ${response.status}: ${response.statusText}`
+                );
+              }
+            }
+            showMessage("Event updated successfully", "success");
+          } else {
+            // Create new event - backend will use authenticated user from JWT
+            const response = await fetch("http://localhost:8080/api/events/", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+              body: JSON.stringify(eventData),
+            });
+
+            console.log("📊 Response Status:", response.status);
+            const responseText = await response.text();
+            console.log("📋 Response Body:", responseText);
+
+            if (!response.ok) {
+              try {
+                const errorData = JSON.parse(responseText);
+                throw new Error(
+                  errorData.message ||
+                    `HTTP ${response.status}: ${response.statusText}`
+                );
+              } catch (e) {
+                throw new Error(
+                  responseText ||
+                    `HTTP ${response.status}: ${response.statusText}`
+                );
+              }
+            }
+            showMessage("Event created successfully", "success");
+          }
+
+          resetForm();
+          loadEvents();
+        } catch (error) {
+          console.error("❌ Error:", error);
+          showMessage(
+            "Failed to save event: " + (error.message || "Unknown error"),
+            "error"
+          );
+        }
+      }
+
+      function editEvent(eventId) {
+        const event = allEvents.find((e) => e.id === eventId);
+        if (!event) return;
+
+        // Handle both eventDate/eventTime and startAt formats
+        let eventDate = event.eventDate;
+        let eventTime = event.eventTime;
+
+        if (!eventDate && event.startAt) {
+          const startDate = new Date(event.startAt);
+          eventDate = startDate.toISOString().split("T")[0]; // YYYY-MM-DD
+          eventTime = startDate.toTimeString().split(" ")[0].slice(0, 5); // HH:mm
+        }
+
+        editingEventId = eventId;
+        document.getElementById("formTitle").textContent = "Edit Event";
+        document.getElementById("title").value = event.title || "";
+        document.getElementById("description").value = event.description || "";
+        document.getElementById("eventDate").value = eventDate || "";
+        document.getElementById("eventTime").value = eventTime || "";
+        document.getElementById("location").value = event.location || "";
+        document.getElementById("capacity").value = event.capacity || 100;
+
+        // Scroll to form
+        document
+          .querySelector(".form-section")
+          .scrollIntoView({ behavior: "smooth" });
+      }
+
+      async function deleteEvent(eventId) {
+        if (!confirm("Are you sure you want to delete this event?")) return;
+
+        try {
+          const token = getAuthToken();
+          const response = await fetch(
+            `http://localhost:8080/api/events/${eventId}`,
+            {
+              method: "DELETE",
+              headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+
+          console.log("📊 Delete Response Status:", response.status);
+          const responseText = await response.text();
+          console.log("📋 Delete Response Body:", responseText);
+
+          if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+          }
+
+          showMessage("Event deleted successfully", "success");
+          loadEvents();
+        } catch (error) {
+          console.error("❌ Failed to delete event:", error);
+          showMessage("Failed to delete event: " + error.message, "error");
+        }
+      }
+
+      function resetForm() {
+        editingEventId = null;
+        document.getElementById("eventForm").reset();
+        document.getElementById("formTitle").textContent = "Create New Event";
+      }
+
+      function filterEvents() {
+        const searchText = document
+          .getElementById("searchInput")
+          .value.toLowerCase();
+        const eventsList = document.getElementById("eventsList");
+
+        const filtered = allEvents.filter((event) =>
+          event.title.toLowerCase().includes(searchText)
+        );
+
+        if (filtered.length === 0) {
+          eventsList.innerHTML =
+            '<div class="empty-state"><p>No events match your search</p></div>';
+          return;
+        }
+
+        eventsList.innerHTML = filtered
+          .map((event) => {
+            // Handle both eventDate/eventTime and startAt formats
+            let dateStr = "";
+            let timeStr = "";
+
+            if (event.eventDate && event.eventTime) {
+              dateStr = event.eventDate;
+              timeStr = event.eventTime;
+            } else if (event.startAt) {
+              const startDate = new Date(event.startAt);
+              dateStr = startDate.toISOString().split("T")[0]; // YYYY-MM-DD
+              timeStr = startDate.toTimeString().split(" ")[0].slice(0, 5); // HH:mm
+            }
+
+            return `
+                    <div class="event-card">
+                        <div class="event-info">
+                            <h3>${escapeHtml(event.title)}</h3>
+                            <p><strong>Date:</strong> ${formatDate(dateStr)}</p>
+                            <p><strong>Time:</strong> ${timeStr}</p>
+                            <p><strong>Location:</strong> ${escapeHtml(
+                              event.location
+                            )}</p>
+                            <p><strong>Capacity:</strong> ${
+                              event.capacity
+                            } attendees</p>
+                        </div>
+                        <div class="event-actions">
+                            <button class="btn-sm btn-edit" onclick="editEvent(${
+                              event.id
+                            })">Edit</button>
+                            <button class="btn-sm btn-delete" onclick="deleteEvent(${
+                              event.id
+                            })">Delete</button>
+                        </div>
+                    </div>
+                `;
+          })
+          .join("");
+      }
+
+      function showMessage(message, type) {
+        const messageDiv = document.getElementById("message");
+        messageDiv.textContent = message;
+        messageDiv.className = `message ${type}`;
+        setTimeout(() => {
+          messageDiv.className = "message";
+        }, 3000);
+      }
+
+      function goBack() {
+        window.location.href = "admin-dashboard.html";
+      }
+
+      function formatDate(dateStr) {
+        const date = new Date(dateStr);
+        return date.toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+        });
+      }
+
+      function escapeHtml(text) {
+        const div = document.createElement("div");
+        div.textContent = text;
+        return div.innerHTML;
+      }
+    </script>
+  </body>
+</html>

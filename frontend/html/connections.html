@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Connections | AlumniBridge</title>
+    <link rel="stylesheet" href="../css/connections.css" />
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar">
+      <div class="nav-brand">
+        <a href="landing.html">AlumniBridge</a>
+      </div>
+      <div class="nav-links">
+        <a href="landing.html">Home</a>
+        <a href="search.html">Search</a>
+        <a href="connections.html" class="active">Connections</a>
+        <a href="profile.html">Profile</a>
+        <a href="#" onclick="logout()">Logout</a>
+      </div>
+    </nav>
+
+    <div class="connections-container">
+      <h1 class="page-title">My Network</h1>
+
+      <!-- Alert Container -->
+      <div id="alertContainer"></div>
+
+      <!-- Tabs -->
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="connections">
+          My Connections <span id="connectionsCount" class="badge">0</span>
+        </button>
+        <button class="tab-btn" data-tab="received">
+          Received Requests <span id="receivedCount" class="badge">0</span>
+        </button>
+        <button class="tab-btn" data-tab="sent">
+          Sent Requests <span id="sentCount" class="badge">0</span>
+        </button>
+      </div>
+
+      <!-- Tab Content -->
+      <div class="tab-content">
+        <!-- My Connections -->
+        <div id="connections" class="tab-panel active">
+          <div class="section-header">
+            <h2>Connected People</h2>
+          </div>
+          <div id="connectionsList" class="users-grid">
+            <p class="loading">Loading connections...</p>
+          </div>
+        </div>
+
+        <!-- Received Requests -->
+        <div id="received" class="tab-panel">
+          <div class="section-header">
+            <h2>Pending Requests</h2>
+            <p class="subtitle">People who want to connect with you</p>
+          </div>
+          <div id="receivedList" class="users-grid">
+            <p class="loading">Loading requests...</p>
+          </div>
+        </div>
+
+        <!-- Sent Requests -->
+        <div id="sent" class="tab-panel">
+          <div class="section-header">
+            <h2>Sent Requests</h2>
+            <p class="subtitle">Awaiting response from these people</p>
+          </div>
+          <div id="sentList" class="users-grid">
+            <p class="loading">Loading sent requests...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="../js/api.js"></script>
+    <script src="../js/connections.js"></script>
+  </body>
+</html>

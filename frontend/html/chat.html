@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat | AlumniBridge</title>
+    <link rel="stylesheet" href="../css/chat.css">
+</head>
+<body>
+    <div class="chat-container">
+        <!-- Sidebar - Conversations -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <a href="connections.html" class="back-btn">←</a>
+                <h2>Messages</h2>
+                <button class="new-chat-btn" onclick="showNewChatModal()">+</button>
+            </div>
+            
+            <div class="search-box">
+                <input type="text" id="searchConversations" placeholder="Search conversations..." oninput="filterConversations()">
+            </div>
+            
+            <div class="conversations-list" id="conversationsList">
+                <div class="loading">Loading conversations...</div>
+            </div>
+        </div>
+
+        <!-- Main Chat Area -->
+        <div class="chat-main">
+            <!-- Empty State -->
+            <div id="emptyState" class="empty-state">
+                <div class="empty-icon">💬</div>
+                <h3>Select a conversation</h3>
+                <p>Choose from your connections to start chatting</p>
+            </div>
+
+            <!-- Chat Window (hidden initially) -->
+            <div id="chatWindow" class="chat-window" style="display: none;">
+                <div class="chat-header">
+                    <div class="chat-user-info">
+                        <div class="user-avatar" id="chatAvatar">?</div>
+                        <div class="user-details">
+                            <h3 id="chatUserName">User Name</h3>
+                            <span class="status" id="chatUserStatus">
+                                <span class="status-dot offline"></span>
+                                <span class="status-text">Offline</span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="chat-actions">
+                        <button onclick="viewProfile()" title="View Profile">👤</button>
+                    </div>
+                </div>
+
+                <div class="messages-area" id="messagesArea">
+                    <div class="loading">Loading messages...</div>
+                </div>
+
+                <div class="message-input-area">
+                    <input type="text" id="messageInput" placeholder="Type a message..." onkeypress="handleKeyPress(event)">
+                    <button class="send-btn" onclick="sendMessage()">
+                        <span>Send</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- New Chat Modal -->
+    <div id="newChatModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Start New Chat</h3>
+                <button class="close-btn" onclick="hideNewChatModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <input type="text" id="searchConnections" placeholder="Search connections..." oninput="filterNewChatList()">
+                <div class="connections-list" id="newChatList">
+                    <div class="loading">Loading connections...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/api.js"></script>
+    <script src="../js/chat.js"></script>
+</body>
+</html>

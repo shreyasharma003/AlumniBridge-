@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Profile - Alumni Bridge</title>
+    <link rel="stylesheet" href="../css/professional.css" />
+    <style>
+      body {
+        background-color: var(--bg-light);
+      }
+
+      .container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+
+      .header {
+        background: white;
+        padding: 20px 30px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        margin-bottom: 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .header h1 {
+        color: var(--text-primary);
+        font-size: 24px;
+        margin: 0;
+      }
+
+      .back-btn {
+        background: var(--primary);
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: background 0.3s;
+      }
+
+      .back-btn:hover {
+        background: var(--primary-dark);
+      }
+
+      .profile-card {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+      }
+
+      .profile-header {
+        background: linear-gradient(
+          135deg,
+          var(--primary) 0%,
+          var(--primary-dark) 100%
+        );
+        padding: 40px 30px;
+        color: white;
+        text-align: center;
+      }
+
+      .profile-avatar {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.2);
+        margin: 0 auto 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 40px;
+        object-fit: cover;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .profile-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .edit-mode .profile-avatar {
+        opacity: 0.7;
+      }
+
+      .picture-upload-label {
+        display: none;
+        color: white;
+        font-size: 12px;
+        text-align: center;
+        position: absolute;
+        width: 100%;
+        bottom: 5px;
+        left: 0;
+      }
+
+      .edit-mode .picture-upload-label {
+        display: block;
+      }
+
+      #pictureInput {
+        display: none;
+      }
+
+      .profile-header h2 {
+        font-size: 28px;
+        margin-bottom: 5px;
+        margin: 0 0 5px 0;
+      }
+
+      .profile-header p {
+        font-size: 16px;
+        opacity: 0.9;
+        margin: 0;
+      }
+
+      .profile-content {
+        padding: 30px;
+      }
+
+      .section {
+        margin-bottom: 30px;
+      }
+
+      .section-title {
+        font-size: 18px;
+        color: var(--text-primary);
+        margin-bottom: 15px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid var(--primary);
+      }
+
+      .form-group {
+        margin-bottom: 15px;
+      }
+
+      .form-group label {
+        display: block;
+        color: var(--text-primary);
+        margin-bottom: 5px;
+        font-weight: 500;
+      }
+
+      .form-group input,
+      .form-group select,
+      .form-group textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid var(--border-color);
+        border-radius: 5px;
+        font-family: inherit;
+        font-size: 14px;
+      }
+
+      .form-group input:focus,
+      .form-group select:focus,
+      .form-group textarea:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 5px rgba(44, 90, 160, 0.3);
+      }
+
+      .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+      }
+
+      .form-group textarea {
+        resize: vertical;
+        min-height: 100px;
+      }
+
+      .info-display {
+        background: var(--bg-light);
+        padding: 15px;
+        border-radius: 5px;
+        color: var(--text-secondary);
+      }
+
+      .edit-mode .info-display {
+        display: none;
+      }
+
+      .edit-mode .form-group {
+        display: block;
+      }
+
+      .form-group.edit-only {
+        display: none;
+      }
+
+      .edit-mode .form-group.edit-only {
+        display: block;
+      }
+
+      .button-group {
+        display: flex;
+        gap: 10px;
+        margin-top: 20px;
+      }
+
+      .btn {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 500;
+        transition: background 0.3s;
+      }
+
+      .btn-primary {
+        background: var(--primary);
+        color: white;
+      }
+
+      .btn-primary:hover {
+        background: var(--primary-dark);
+      }
+
+      .btn-secondary {
+        background: var(--grey-lighter);
+        color: var(--text-primary);
+      }
+
+      .btn-secondary:hover {
+        background: var(--grey-light);
+      }
+
+      .btn-danger {
+        background: var(--danger);
+        color: white;
+      }
+
+      .btn-danger:hover {
+        background: #dc3545;
+      }
+
+      .message {
+        padding: 15px;
+        margin-bottom: 15px;
+        border-radius: 5px;
+        display: none;
+      }
+
+      .message.success {
+        background: var(--success-light);
+        color: var(--success-dark);
+        border: 1px solid var(--success);
+        display: block;
+      }
+
+      .message.error {
+        background: var(--danger-light);
+        color: var(--danger-dark);
+        border: 1px solid var(--danger);
+        display: block;
+      }
+
+      @media (max-width: 600px) {
+        .form-row {
+          grid-template-columns: 1fr;
+        }
+
+        .profile-header {
+          padding: 30px 20px;
+        }
+
+        .profile-content {
+          padding: 20px;
+        }
+
+        .header {
+          flex-direction: column;
+          gap: 15px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>My Profile</h1>
+        <button class="back-btn" onclick="goBack()">← Back to Dashboard</button>
+      </div>
+
+      <div class="profile-card">
+        <div class="profile-header">
+          <div
+            class="profile-avatar"
+            id="avatar"
+            onclick="document.getElementById('pictureInput').click()"
+          >
+            👤
+            <span class="picture-upload-label">Click to change picture</span>
+          </div>
+          <input
+            type="file"
+            id="pictureInput"
+            accept="image/*"
+            onchange="handlePictureUpload(event)"
+          />
+          <h2 id="displayName">Loading...</h2>
+          <p id="displayRole">Student</p>
+        </div>
+
+        <div class="profile-content">
+          <div id="message"></div>
+
+          <div class="section">
+            <div class="section-title">Personal Information</div>
+
+            <div class="form-group">
+              <label>Name</label>
+              <div class="info-display" id="nameDisplay">-</div>
+              <input
+                type="text"
+                id="name"
+                placeholder="Full Name"
+                class="edit-only"
+              />
+            </div>
+
+            <div class="form-group">
+              <label>Email</label>
+              <div class="info-display" id="emailDisplay">-</div>
+              <input
+                type="email"
+                id="email"
+                placeholder="Email Address"
+                disabled
+              />
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label>Batch Year</label>
+                <div class="info-display" id="batchDisplay">-</div>
+                <select id="batch" class="edit-only">
+                  <option value="">Select Batch Year</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label>Degree</label>
+                <div class="info-display" id="degreeDisplay">-</div>
+                <select id="degree" class="edit-only">
+                  <option value="">Select Degree</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="section">
+            <div class="section-title">Professional Information</div>
+
+            <div class="form-group">
+              <label>Headline</label>
+              <div class="info-display" id="headlineDisplay">-</div>
+              <input
+                type="text"
+                id="headline"
+                placeholder="e.g., Software Engineer at Tech Company"
+                class="edit-only"
+              />
+            </div>
+
+            <div class="form-group">
+              <label>Bio</label>
+              <div class="info-display" id="bioDisplay">-</div>
+              <textarea
+                id="bio"
+                placeholder="Tell us about yourself..."
+                class="edit-only"
+              ></textarea>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label>Skills</label>
+                <div class="info-display" id="skillsDisplay">-</div>
+                <input
+                  type="text"
+                  id="skills"
+                  placeholder="e.g., Java, Python, React"
+                  class="edit-only"
+                />
+              </div>
+
+              <div class="form-group">
+                <label>Location</label>
+                <div class="info-display" id="locationDisplay">-</div>
+                <input
+                  type="text"
+                  id="location"
+                  placeholder="City, Country"
+                  class="edit-only"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="section">
+            <div class="section-title">Social & Web Links</div>
+
+            <div class="form-group">
+              <label>LinkedIn</label>
+              <div class="info-display" id="linkedinDisplay">-</div>
+              <input
+                type="url"
+                id="linkedin"
+                placeholder="https://linkedin.com/in/yourprofile"
+                class="edit-only"
+              />
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label>GitHub</label>
+                <div class="info-display" id="githubDisplay">-</div>
+                <input
+                  type="url"
+                  id="github"
+                  placeholder="https://github.com/yourprofile"
+                  class="edit-only"
+                />
+              </div>
+
+              <div class="form-group">
+                <label>Portfolio/Website</label>
+                <div class="info-display" id="portfolioDisplay">-</div>
+                <input
+                  type="url"
+                  id="portfolio"
+                  placeholder="https://yourwebsite.com"
+                  class="edit-only"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="button-group">
+            <button
+              class="btn btn-primary"
+              id="editBtn"
+              onclick="toggleEditMode()"
+            >
+              Edit Profile
+            </button>
+            <button
+              class="btn btn-secondary"
+              id="cancelBtn"
+              onclick="toggleEditMode()"
+              style="display: none"
+            >
+              Cancel
+            </button>
+            <button
+              class="btn btn-primary"
+              id="saveBtn"
+              onclick="saveProfile()"
+              style="display: none"
+            >
+              Save Changes
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="../js/api.js"></script>
+    <script>
+      let isEditMode = false;
+      let currentProfile = null;
+      let batches = [];
+      let degrees = [];
+      let uploadedPictureUrl = null;
+
+      document.addEventListener("DOMContentLoaded", function () {
+        checkAuth();
+        loadBatches();
+        loadDegrees();
+        loadProfile();
+      });
+
+      function checkAuth() {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          window.location.href = "login.html";
+        }
+      }
+
+      function handlePictureUpload(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        // Check file size (max 2MB)
+        if (file.size > 2 * 1024 * 1024) {
+          showMessage("Image size must be less than 2MB", "error");
+          return;
+        }
+
+        // Check file type
+        if (!file.type.startsWith("image/")) {
+          showMessage("Please upload a valid image file", "error");
+          return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          uploadedPictureUrl = e.target.result; // Base64 data URL
+
+          // Display preview
+          const avatar = document.getElementById("avatar");
+          avatar.innerHTML = `<img src="${uploadedPictureUrl}" alt="Profile Picture">
+                                   <span class="picture-upload-label">Click to change picture</span>`;
+
+          showMessage(
+            "Picture ready to upload. Click Save Changes to apply.",
+            "success"
+          );
+        };
+        reader.onerror = function () {
+          showMessage("Failed to read file", "error");
+        };
+        reader.readAsDataURL(file);
+      }
+
+      async function loadProfile() {
+        try {
+          const response = await apiCall("/users/me", { method: "GET" });
+          currentProfile = response;
+          displayProfile();
+        } catch (error) {
+          console.error("Failed to load profile:", error);
+          showMessage("Failed to load profile", "error");
+        }
+      }
+
+      async function loadBatches() {
+        try {
+          const response = await apiCall("/batches", { method: "GET" });
+          batches = response;
+          const batchSelect = document.getElementById("batch");
+          batches.forEach((batch) => {
+            const option = document.createElement("option");
+            option.value = batch.id;
+            option.textContent = batch.year;
+            batchSelect.appendChild(option);
+          });
+        } catch (error) {
+          console.error("Failed to load batches:", error);
+        }
+      }
+
+      async function loadDegrees() {
+        try {
+          const response = await apiCall("/degrees", { method: "GET" });
+          degrees = response;
+          const degreeSelect = document.getElementById("degree");
+          degrees.forEach((degree) => {
+            const option = document.createElement("option");
+            option.value = degree.id;
+            option.textContent = degree.name;
+            degreeSelect.appendChild(option);
+          });
+        } catch (error) {
+          console.error("Failed to load degrees:", error);
+        }
+      }
+
+      function displayProfile() {
+        const profile = currentProfile.profile || currentProfile;
+        const user = currentProfile.user || currentProfile;
+
+        // Set display values
+        document.getElementById("displayName").textContent =
+          user.name || "User";
+        document.getElementById("displayRole").textContent =
+          user.role || "Student";
+        document.getElementById("nameDisplay").textContent = user.name || "-";
+        document.getElementById("emailDisplay").textContent = user.email || "-";
+        document.getElementById("name").value = user.name || "";
+        document.getElementById("email").value = user.email || "";
+
+        // Display profile picture
+        if (profile && profile.pictureUrl) {
+          const avatar = document.getElementById("avatar");
+          avatar.innerHTML = `<img src="${profile.pictureUrl}" alt="Profile Picture">
+                                   <span class="picture-upload-label">Click to change picture</span>`;
+        }
+
+        if (profile) {
+          document.getElementById("batchDisplay").textContent =
+            profile.batchYear || "-";
+          document.getElementById("batch").value = profile.batchId || "";
+
+          document.getElementById("degreeDisplay").textContent =
+            profile.degreeName || "-";
+          document.getElementById("degree").value = profile.degreeId || "";
+
+          document.getElementById("headlineDisplay").textContent =
+            profile.headline || "-";
+          document.getElementById("headline").value = profile.headline || "";
+
+          document.getElementById("bioDisplay").textContent =
+            profile.bio || "-";
+          document.getElementById("bio").value = profile.bio || "";
+
+          document.getElementById("skillsDisplay").textContent =
+            profile.skills || "-";
+          document.getElementById("skills").value = profile.skills || "";
+
+          document.getElementById("locationDisplay").textContent =
+            profile.location || "-";
+          document.getElementById("location").value = profile.location || "";
+
+          document.getElementById("linkedinDisplay").textContent =
+            profile.linkedinUrl
+              ? `<a href="${profile.linkedinUrl}" target="_blank">View Profile</a>`
+              : "-";
+          document.getElementById("linkedin").value = profile.linkedinUrl || "";
+
+          document.getElementById("githubDisplay").textContent =
+            profile.githubUrl
+              ? `<a href="${profile.githubUrl}" target="_blank">View Profile</a>`
+              : "-";
+          document.getElementById("github").value = profile.githubUrl || "";
+
+          document.getElementById("portfolioDisplay").textContent =
+            profile.portfolioUrl
+              ? `<a href="${profile.portfolioUrl}" target="_blank">Visit Website</a>`
+              : "-";
+          document.getElementById("portfolio").value =
+            profile.portfolioUrl || "";
+        }
+      }
+
+      function toggleEditMode() {
+        isEditMode = !isEditMode;
+        const card = document.querySelector(".profile-card");
+        const editBtn = document.getElementById("editBtn");
+        const cancelBtn = document.getElementById("cancelBtn");
+        const saveBtn = document.getElementById("saveBtn");
+
+        if (isEditMode) {
+          card.classList.add("edit-mode");
+          editBtn.style.display = "none";
+          cancelBtn.style.display = "block";
+          saveBtn.style.display = "block";
+          uploadedPictureUrl = null; // Reset picture upload
+        } else {
+          card.classList.remove("edit-mode");
+          editBtn.style.display = "block";
+          cancelBtn.style.display = "none";
+          saveBtn.style.display = "none";
+          loadProfile(); // Reload in case user made changes
+        }
+      }
+
+      async function saveProfile() {
+        try {
+          const userId = localStorage.getItem("userId");
+
+          const profileData = {
+            name: document.getElementById("name").value,
+            email: document.getElementById("email").value,
+            batchYear: parseInt(document.getElementById("batch").value) || null,
+            degreeName: document.getElementById("degree").value || null,
+            headline: document.getElementById("headline").value,
+            bio: document.getElementById("bio").value,
+            skills: document.getElementById("skills").value,
+            location: document.getElementById("location").value,
+            linkedinUrl: document.getElementById("linkedin").value,
+            githubUrl: document.getElementById("github").value,
+            portfolioUrl: document.getElementById("portfolio").value,
+            pictureUrl:
+              uploadedPictureUrl ||
+              (currentProfile.profile
+                ? currentProfile.profile.pictureUrl
+                : null),
+          };
+
+          const response = await apiCall(`/users/${userId}`, {
+            method: "PUT",
+            body: JSON.stringify(profileData),
+          });
+
+          currentProfile = response;
+          showMessage("Profile updated successfully!", "success");
+          setTimeout(() => {
+            toggleEditMode();
+            displayProfile();
+          }, 1500);
+        } catch (error) {
+          console.error("Failed to save profile:", error);
+          showMessage("Failed to save profile: " + error.message, "error");
+        }
+      }
+
+      function showMessage(text, type) {
+        const messageDiv = document.getElementById("message");
+        messageDiv.textContent = text;
+        messageDiv.className = `message ${type}`;
+
+        if (type === "success") {
+          setTimeout(() => {
+            messageDiv.className = "message";
+          }, 3000);
+        }
+      }
+
+      function goBack() {
+        const userRole = localStorage.getItem("userRole");
+        if (userRole === "STUDENT") {
+          window.location.href = "student-dashboard.html";
+        } else if (userRole === "ALUMNI") {
+          window.location.href = "alumni-dashboard.html";
+        } else if (userRole === "ADMIN") {
+          window.location.href = "admin-dashboard.html";
+        } else {
+          window.location.href = "../index.html";
+        }
+      }
+    </script>
+  </body>
+</html>

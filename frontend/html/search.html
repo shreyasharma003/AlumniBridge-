@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Search Users | AlumniBridge</title>
+    <link rel="stylesheet" href="../css/search.css" />
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar">
+      <div class="nav-brand">
+        <a href="landing.html">AlumniBridge</a>
+      </div>
+      <div class="nav-links">
+        <a href="landing.html">Home</a>
+        <a href="search.html" class="active">Search</a>
+        <a href="connections.html">Connections</a>
+        <a href="profile.html">Profile</a>
+        <a href="#" onclick="logout()">Logout</a>
+      </div>
+    </nav>
+
+    <div class="search-container">
+      <h1 class="page-title">Find People</h1>
+
+      <!-- Alert Container -->
+      <div id="alertContainer"></div>
+
+      <!-- Search Filters -->
+      <div class="search-filters">
+        <div class="search-row">
+          <div class="search-input-group">
+            <input
+              type="text"
+              id="searchQuery"
+              placeholder="Search by name..."
+              class="search-input"
+            />
+            <button class="search-btn" onclick="performSearch()">
+              🔍 Search
+            </button>
+          </div>
+        </div>
+        <div class="filter-row">
+          <select id="filterDegree" onchange="performSearch()">
+            <option value="">All Degrees</option>
+          </select>
+          <select id="filterInstitute" onchange="performSearch()">
+            <option value="">All Institutes</option>
+            <option value="IPS Academy">IPS Academy</option>
+          </select>
+          <select id="filterBatch" onchange="performSearch()">
+            <option value="">All Batches</option>
+          </select>
+          <select id="filterRole" onchange="filterResults()">
+            <option value="">All Roles</option>
+            <option value="STUDENT">Students</option>
+            <option value="ALUMNI">Alumni</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Search Results -->
+      <div class="results-section">
+        <div class="results-header">
+          <h2>Results <span id="resultsCount" class="count">(0)</span></h2>
+        </div>
+        <div id="searchResults" class="users-grid">
+          <p class="initial-message">
+            Use the search above to find alumni and students
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <script src="../js/api.js"></script>
+    <script src="../js/search.js"></script>
+  </body>
+</html>

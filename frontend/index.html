@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AlumniBridge - Alumni & Student Connect Platform</title>
+    <link rel="stylesheet" href="css/professional.css" />
+    <style>
+      /* Landing Page Specific Styles */
+      body {
+        background-color: var(--bg-primary);
+      }
+
+      .navbar {
+        background: white;
+        padding: 15px 0;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+
+      .navbar-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .navbar-brand a {
+        font-size: 24px;
+        font-weight: 700;
+        color: var(--primary-dark);
+        text-decoration: none;
+      }
+
+      .navbar-menu {
+        display: flex;
+        gap: 30px;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      .navbar-menu a {
+        color: var(--text-primary);
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.3s;
+      }
+
+      .navbar-menu a:hover {
+        color: var(--primary);
+      }
+
+      .navbar-right {
+        display: flex;
+        gap: 10px;
+      }
+
+      .hero {
+        background: linear-gradient(
+          135deg,
+          var(--primary-dark) 0%,
+          var(--primary) 100%
+        );
+        color: white;
+        padding: 100px 20px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .hero::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: radial-gradient(
+            circle at 20% 80%,
+            rgba(255, 255, 255, 0.1) 0%,
+            transparent 50%
+          ),
+          radial-gradient(
+            circle at 80% 20%,
+            rgba(255, 255, 255, 0.1) 0%,
+            transparent 50%
+          );
+        pointer-events: none;
+      }
+
+      .hero-content {
+        max-width: 800px;
+        margin: 0 auto;
+        position: relative;
+        z-index: 1;
+      }
+
+      .hero h1 {
+        font-size: 48px;
+        font-weight: 700;
+        margin-bottom: 15px;
+        animation: fadeInUp 0.6s ease;
+      }
+
+      .hero-subtitle {
+        font-size: 24px;
+        margin-bottom: 20px;
+        opacity: 0.9;
+        animation: fadeInUp 0.6s ease 0.1s backwards;
+      }
+
+      .hero-description {
+        font-size: 16px;
+        line-height: 1.8;
+        margin-bottom: 30px;
+        opacity: 0.95;
+        animation: fadeInUp 0.6s ease 0.2s backwards;
+      }
+
+      .hero-actions {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        flex-wrap: wrap;
+        animation: fadeInUp 0.6s ease 0.3s backwards;
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .section {
+        padding: 80px 20px;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .section-title {
+        font-size: 32px;
+        font-weight: 700;
+        color: var(--primary-dark);
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      .section-subtitle {
+        text-align: center;
+        color: var(--text-secondary);
+        font-size: 16px;
+        margin-bottom: 50px;
+      }
+
+      .about {
+        background: white;
+      }
+
+      .about-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 30px;
+      }
+
+      .about-card {
+        background: var(--bg-primary);
+        padding: 40px 30px;
+        border-radius: 8px;
+        text-align: center;
+        border-top: 4px solid var(--primary);
+        transition: all 0.3s ease;
+      }
+
+      .about-card:hover {
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        transform: translateY(-5px);
+      }
+
+      .about-icon {
+        font-size: 48px;
+        margin-bottom: 20px;
+      }
+
+      .about-card h3 {
+        color: var(--primary-dark);
+        font-size: 20px;
+        margin-bottom: 15px;
+        font-weight: 600;
+      }
+
+      .about-card p {
+        color: var(--text-secondary);
+        line-height: 1.8;
+        font-size: 14px;
+      }
+
+      .features {
+        background: var(--bg-primary);
+      }
+
+      .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 25px;
+      }
+
+      .feature-item {
+        background: white;
+        padding: 35px 25px;
+        border-radius: 8px;
+        text-align: center;
+        border-left: 4px solid var(--primary);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s ease;
+      }
+
+      .feature-item:hover {
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        transform: translateY(-5px);
+      }
+
+      .feature-icon {
+        font-size: 44px;
+        margin-bottom: 20px;
+        display: block;
+      }
+
+      .feature-item h3 {
+        color: var(--primary);
+        font-size: 18px;
+        margin-bottom: 12px;
+        font-weight: 600;
+      }
+
+      .feature-item p {
+        color: var(--text-secondary);
+        font-size: 14px;
+        line-height: 1.7;
+      }
+
+      .events-showcase {
+        background: white;
+      }
+
+      .events-carousel {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 25px;
+        margin-bottom: 40px;
+      }
+
+      .event-card {
+        background: var(--bg-primary);
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s ease;
+        border-left: 4px solid var(--primary);
+      }
+
+      .event-card:hover {
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        transform: translateY(-5px);
+      }
+
+      .event-header {
+        background: linear-gradient(
+          135deg,
+          var(--primary) 0%,
+          var(--primary-dark) 100%
+        );
+        color: white;
+        padding: 20px;
+        font-weight: 600;
+        font-size: 16px;
+      }
+
+      .event-body {
+        padding: 20px;
+      }
+
+      .event-date {
+        color: var(--primary);
+        font-size: 13px;
+        font-weight: 600;
+        margin-bottom: 8px;
+      }
+
+      .event-description {
+        color: var(--text-secondary);
+        font-size: 14px;
+        line-height: 1.6;
+        margin-bottom: 15px;
+      }
+
+      .loading-placeholder {
+        text-align: center;
+        padding: 60px 20px;
+        color: var(--text-secondary);
+      }
+
+      .loader {
+        border: 3px solid var(--grey-lighter);
+        border-top: 3px solid var(--primary);
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        animation: spin 1s linear infinite;
+        margin: 0 auto 20px;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      .cta {
+        background: linear-gradient(
+          135deg,
+          var(--primary-dark) 0%,
+          var(--primary) 100%
+        );
+        color: white;
+        padding: 80px 20px;
+        text-align: center;
+      }
+
+      .cta-content {
+        max-width: 600px;
+        margin: 0 auto;
+      }
+
+      .cta h2 {
+        font-size: 36px;
+        margin-bottom: 15px;
+        font-weight: 700;
+      }
+
+      .cta p {
+        font-size: 16px;
+        margin-bottom: 30px;
+        opacity: 0.95;
+      }
+
+      footer {
+        background: var(--primary-dark);
+        color: white;
+        padding: 50px 20px 20px;
+      }
+
+      .footer-content {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 40px;
+        margin-bottom: 30px;
+      }
+
+      .footer-section h4 {
+        color: white;
+        margin-bottom: 15px;
+        font-weight: 600;
+        font-size: 16px;
+      }
+
+      .footer-section p,
+      .footer-section a {
+        color: rgba(255, 255, 255, 0.8);
+        text-decoration: none;
+        font-size: 14px;
+        line-height: 1.8;
+        transition: color 0.3s;
+      }
+
+      .footer-section a:hover {
+        color: white;
+      }
+
+      .footer-bottom {
+        text-align: center;
+        padding-top: 20px;
+        border-top: 1px solid rgba(255, 255, 255, 0.2);
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 14px;
+      }
+
+      .text-center {
+        text-align: center;
+      }
+
+      .mt-xl {
+        margin-top: 40px;
+      }
+
+      .btn-sm {
+        padding: 8px 16px;
+        font-size: 13px;
+      }
+
+      /* Responsive Design */
+      @media (max-width: 768px) {
+        .navbar-menu {
+          display: none;
+        }
+
+        .hero h1 {
+          font-size: 32px;
+        }
+
+        .hero-subtitle {
+          font-size: 18px;
+        }
+
+        .hero {
+          padding: 60px 20px;
+        }
+
+        .section {
+          padding: 50px 20px;
+        }
+
+        .section-title {
+          font-size: 24px;
+        }
+
+        .hero-actions {
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .hero-actions .btn {
+          width: 100%;
+          max-width: 300px;
+        }
+
+        .cta h2 {
+          font-size: 24px;
+        }
+
+        .cta {
+          padding: 50px 20px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Alert Container for Notifications -->
+    <div
+      id="alertContainer"
+      style="
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 999;
+        max-width: 400px;
+      "
+    ></div>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+      <div class="navbar-container">
+        <div class="navbar-brand">
+          <a href="index.html">AlumniBridge</a>
+        </div>
+        <ul class="navbar-menu">
+          <li><a href="#home">Home</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#features">Features</a></li>
+          <li><a href="#events">Events</a></li>
+        </ul>
+        <div class="navbar-right">
+          <a href="pages/login.html" class="btn btn-secondary btn-sm">Login</a>
+          <a href="pages/signup.html" class="btn btn-primary btn-sm">Sign Up</a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+      <div class="hero-content">
+        <h1 class="fade-in">Welcome to AlumniBridge</h1>
+        <p class="hero-subtitle">Connect. Network. Grow.</p>
+        <p class="hero-description">
+          Bridge the gap between students and alumni. Build meaningful
+          connections, share opportunities, and grow together in our vibrant
+          community.
+        </p>
+        <div class="hero-actions">
+          <a href="pages/signup.html" class="btn btn-primary btn-lg"
+            >Get Started</a
+          >
+          <a href="#about" class="btn btn-secondary btn-lg">Learn More</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about" id="about">
+      <div class="section">
+        <h2 class="section-title">About AlumniBridge</h2>
+        <p class="section-subtitle">
+          Dedicated to connecting students and alumni of our institution
+        </p>
+
+        <div class="about-grid">
+          <div class="about-card">
+            <div class="about-icon">🎓</div>
+            <h3>For Students</h3>
+            <p>
+              Network with alumni, gain mentorship, discover career
+              opportunities, and stay updated with campus events.
+            </p>
+          </div>
+
+          <div class="about-card">
+            <div class="about-icon">⭐</div>
+            <h3>For Alumni</h3>
+            <p>
+              Stay connected with your batch, mentor students, share
+              experiences, and organize alumni events.
+            </p>
+          </div>
+
+          <div class="about-card">
+            <div class="about-icon">🤝</div>
+            <h3>Community</h3>
+            <p>
+              Build a strong alumni network, foster collaborations, and create
+              lasting professional relationships.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+      <div class="section">
+        <h2 class="section-title">Key Features</h2>
+
+        <div class="features-grid">
+          <div class="feature-item">
+            <div class="feature-icon">👥</div>
+            <h3>Smart Search</h3>
+            <p>
+              Find alumni and students by degree, batch, or institute. Connect
+              with the right people.
+            </p>
+          </div>
+
+          <div class="feature-item">
+            <div class="feature-icon">💼</div>
+            <h3>Connection Requests</h3>
+            <p>
+              Send and manage connection requests. Build your professional
+              network easily.
+            </p>
+          </div>
+
+          <div class="feature-item">
+            <div class="feature-icon">💬</div>
+            <h3>Real-time Chat</h3>
+            <p>
+              Connect via instant messaging with your network. Share ideas and
+              opportunities.
+            </p>
+          </div>
+
+          <div class="feature-item">
+            <div class="feature-icon">📅</div>
+            <h3>Event Management</h3>
+            <p>
+              Post, discover, and register for campus and alumni events in one
+              place.
+            </p>
+          </div>
+
+          <div class="feature-item">
+            <div class="feature-icon">🎯</div>
+            <h3>Batch Filtering</h3>
+            <p>
+              Browse and connect with users from your specific batch or year.
+            </p>
+          </div>
+
+          <div class="feature-item">
+            <div class="feature-icon">⚙️</div>
+            <h3>User Profiles</h3>
+            <p>
+              Create a detailed profile with your education, experience, and
+              professional links.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Upcoming Events Section -->
+    <section class="events-showcase" id="events">
+      <div class="section">
+        <h2 class="section-title">Upcoming Events</h2>
+        <p class="section-subtitle">
+          Don't miss out on upcoming networking events and opportunities.
+        </p>
+
+        <!-- Events Container (will be populated by JavaScript) -->
+        <div class="events-carousel" id="eventsContainer">
+          <div class="loading-placeholder">
+            <div class="loader"></div>
+            <p>Loading events...</p>
+          </div>
+        </div>
+
+        <div class="text-center mt-xl">
+          <a href="pages/events.html" class="btn btn-primary"
+            >View All Events</a
+          >
+        </div>
+      </div>
+    </section>
+
+    <!-- Call-to-Action Section -->
+    <section class="cta">
+      <div class="cta-content">
+        <h2>Ready to Connect?</h2>
+        <p>Join thousands of students and alumni already using AlumniBridge.</p>
+        <a href="pages/signup.html" class="btn btn-primary btn-lg"
+          >Create Your Profile</a
+        >
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <div class="footer-content">
+        <div class="footer-section">
+          <h4>AlumniBridge</h4>
+          <p>Connecting students and alumni, building professional networks.</p>
+        </div>
+        <div class="footer-section">
+          <h4>Quick Links</h4>
+          <a href="#home">Home</a>
+          <a href="#about">About</a>
+          <a href="#features">Features</a>
+          <a href="#events">Events</a>
+        </div>
+        <div class="footer-section">
+          <h4>Legal</h4>
+          <a href="#privacy">Privacy Policy</a>
+          <a href="#terms">Terms of Service</a>
+          <a href="#contact">Contact Us</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 AlumniBridge. All rights reserved.</p>
+      </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/api.js"></script>
+    <script src="js/landing.js"></script>
+  </body>
+</html>

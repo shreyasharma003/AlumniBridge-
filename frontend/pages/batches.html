@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Batches - Alumni Bridge</title>
+    <link rel="stylesheet" href="../css/professional.css" />
+    <style>
+      body {
+        background-color: var(--bg-light);
+        padding: 20px;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .header {
+        background: white;
+        padding: 20px 30px;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        margin-bottom: 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .header h1 {
+        color: #333;
+        font-size: 24px;
+      }
+
+      .back-btn {
+        background: #667eea;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 14px;
+      }
+
+      .back-btn:hover {
+        background: #5568d3;
+      }
+
+      .sorting-controls {
+        margin-bottom: 30px;
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      .sort-btn {
+        padding: 10px 20px;
+        background: white;
+        border: 2px solid #667eea;
+        color: #667eea;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 500;
+        transition: all 0.3s;
+      }
+
+      .sort-btn.active {
+        background: #667eea;
+        color: white;
+      }
+
+      .sort-btn:hover {
+        background: #667eea;
+        color: white;
+      }
+
+      .batches-container {
+        display: flex;
+        flex-direction: column;
+        gap: 40px;
+      }
+
+      .batches-section {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .batches-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 15px;
+      }
+
+      .batch-card {
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        transition: transform 0.3s, box-shadow 0.3s;
+        cursor: pointer;
+        padding: 25px 20px;
+        text-align: center;
+      }
+
+      .batch-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+      }
+
+      .batch-card.active {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        box-shadow: 0 5px 20px rgba(102, 126, 234, 0.3);
+      }
+
+      .batch-year {
+        font-size: 36px;
+        font-weight: 700;
+        margin-bottom: 8px;
+      }
+
+      .batch-label {
+        font-size: 13px;
+        opacity: 0.9;
+      }
+
+      .batch-card.active .batch-label {
+        opacity: 0.8;
+      }
+
+      .members-section {
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+      }
+
+      .members-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 25px 30px;
+        font-size: 20px;
+        font-weight: 600;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .members-content {
+        padding: 30px;
+        min-height: 200px;
+      }
+
+      .members-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 20px;
+      }
+
+      .member-card {
+        background: #f9f9f9;
+        border: 1px solid #f0f0f0;
+        border-radius: 8px;
+        padding: 20px;
+        transition: all 0.3s;
+      }
+
+      .member-card:hover {
+        background: white;
+        border-color: #667eea;
+        box-shadow: 0 2px 10px rgba(102, 126, 234, 0.2);
+      }
+
+      .member-avatar {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        margin-bottom: 15px;
+      }
+
+      .member-name {
+        font-size: 16px;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 5px;
+      }
+
+      .member-email {
+        font-size: 13px;
+        color: #999;
+        margin-bottom: 10px;
+      }
+
+      .member-role {
+        display: inline-block;
+        padding: 4px 12px;
+        background: #667eea;
+        color: white;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 500;
+      }
+
+      .member-role.alumni {
+        background: #51cf66;
+      }
+
+      .member-role.student {
+        background: #667eea;
+      }
+
+      .no-selection {
+        text-align: center;
+        padding: 60px 20px;
+        color: #999;
+      }
+
+      .no-selection-icon {
+        font-size: 64px;
+        margin-bottom: 20px;
+        opacity: 0.3;
+      }
+
+      .no-members {
+        text-align: center;
+        padding: 40px;
+        color: #999;
+      }
+
+      .members-stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 15px;
+        margin-bottom: 25px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #f0f0f0;
+      }
+
+      .stat-box {
+        background: #f9f9f9;
+        padding: 15px;
+        border-radius: 8px;
+        text-align: center;
+      }
+
+      .stat-value {
+        font-size: 24px;
+        font-weight: 700;
+        color: #667eea;
+        margin-bottom: 5px;
+      }
+
+      .stat-label {
+        font-size: 13px;
+        color: #999;
+      }
+
+      .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: white;
+      }
+
+      .empty-state-icon {
+        font-size: 64px;
+        margin-bottom: 20px;
+      }
+
+      @media (max-width: 768px) {
+        .batches-grid {
+          grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+          gap: 10px;
+        }
+
+        .batch-year {
+          font-size: 28px;
+        }
+
+        .members-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .sorting-controls {
+          flex-direction: column;
+          gap: 8px;
+        }
+
+        .sort-btn {
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>📚 Batches</h1>
+        <button class="back-btn" onclick="goBack()">← Back to Dashboard</button>
+      </div>
+
+      <div class="sorting-controls">
+        <button class="sort-btn active" onclick="setSortOrder('asc')">
+          Newest First (↓)
+        </button>
+        <button class="sort-btn" onclick="setSortOrder('desc')">
+          Oldest First (↑)
+        </button>
+      </div>
+
+      <div class="batches-container">
+        <!-- Batches Grid Section -->
+        <div class="batches-section">
+          <h2 style="color: white; font-size: 20px; margin-bottom: 10px">
+            📅 Select a Batch
+          </h2>
+          <div id="batchesList" class="batches-grid"></div>
+        </div>
+
+        <!-- Members Section -->
+        <div class="members-section">
+          <div class="members-header" id="membersHeader">
+            👥 Select a batch to view members
+          </div>
+          <div class="members-content" id="membersContent">
+            <div class="no-selection">
+              <div class="no-selection-icon">👆</div>
+              <p>Click on a batch above to see its members</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="emptyState" class="empty-state" style="display: none">
+        <div class="empty-state-icon">📚</div>
+        <h2>No batches available</h2>
+      </div>
+    </div>
+
+    <script src="../js/api.js"></script>
+    <script>
+      let allBatches = [];
+      let batchUsers = {};
+      let currentSortOrder = "asc"; // 'asc' for newest first, 'desc' for oldest first
+      let selectedBatchId = null;
+
+      document.addEventListener("DOMContentLoaded", function () {
+        checkAuth();
+        loadBatches();
+      });
+
+      function checkAuth() {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          window.location.href = "login.html";
+        }
+      }
+
+      async function loadBatches() {
+        try {
+          const response = await apiCall("/batches", { method: "GET" });
+          allBatches = response;
+          sortBatches();
+          displayBatches();
+        } catch (error) {
+          console.error("Failed to load batches:", error);
+        }
+      }
+
+      function sortBatches() {
+        allBatches.sort((a, b) => {
+          if (currentSortOrder === "asc") {
+            // Newest first
+            return b.year - a.year;
+          } else {
+            // Oldest first
+            return a.year - b.year;
+          }
+        });
+      }
+
+      function setSortOrder(order) {
+        currentSortOrder = order;
+
+        // Update active button
+        document.querySelectorAll(".sort-btn").forEach((btn) => {
+          btn.classList.remove("active");
+        });
+        event.target.classList.add("active");
+
+        sortBatches();
+        displayBatches();
+
+        // Reset member view
+        selectedBatchId = null;
+        showNoSelection();
+      }
+
+      function displayBatches() {
+        const batchesList = document.getElementById("batchesList");
+        const emptyState = document.getElementById("emptyState");
+
+        if (!allBatches || allBatches.length === 0) {
+          batchesList.innerHTML = "";
+          emptyState.style.display = "block";
+          return;
+        }
+
+        emptyState.style.display = "none";
+        batchesList.innerHTML = allBatches
+          .map(
+            (batch) => `
+                <div class="batch-card ${
+                  selectedBatchId === batch.id ? "active" : ""
+                }" 
+                     onclick="selectBatch(${batch.id})">
+                    <div class="batch-year">${batch.year}</div>
+                    <div class="batch-label">Graduation Year</div>
+                </div>
+            `
+          )
+          .join("");
+      }
+
+      function selectBatch(batchId) {
+        selectedBatchId = batchId;
+        displayBatches();
+        loadAndShowBatchMembers(batchId);
+      }
+
+      async function loadAndShowBatchMembers(batchId) {
+        try {
+          const response = await apiCall(`/batches/${batchId}`, {
+            method: "GET",
+          });
+          if (response && response.users) {
+            batchUsers[batchId] = response.users;
+            displayBatchMembers(batchId, response.users);
+          } else {
+            displayBatchMembers(batchId, []);
+          }
+        } catch (error) {
+          console.error("Failed to load batch members:", error);
+          displayBatchMembers(batchId, []);
+        }
+      }
+
+      function displayBatchMembers(batchId, users) {
+        const batch = allBatches.find((b) => b.id === batchId);
+        if (!batch) return;
+
+        const membersHeader = document.getElementById("membersHeader");
+        const membersContent = document.getElementById("membersContent");
+
+        membersHeader.textContent = `👥 Batch ${batch.year} Members (${users.length})`;
+
+        if (users.length === 0) {
+          membersContent.innerHTML =
+            '<div class="no-members">No members in this batch yet</div>';
+        } else {
+          const studentCount = users.filter((u) => u.role === "STUDENT").length;
+          const alumniCount = users.filter((u) => u.role === "ALUMNI").length;
+
+          const membersHTML = `
+                    <div class="members-stats">
+                        <div class="stat-box">
+                            <div class="stat-value">${users.length}</div>
+                            <div class="stat-label">Total Members</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-value">${studentCount}</div>
+                            <div class="stat-label">Students</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-value">${alumniCount}</div>
+                            <div class="stat-label">Alumni</div>
+                        </div>
+                    </div>
+                    <div class="members-grid">
+                        ${users
+                          .map(
+                            (user) => `
+                            <div class="member-card">
+                                <div class="member-avatar">👤</div>
+                                <div class="member-name">${user.name}</div>
+                                <div class="member-email">${user.email}</div>
+                                <span class="member-role ${
+                                  user.role === "ALUMNI" ? "alumni" : "student"
+                                }">
+                                    ${
+                                      user.role === "STUDENT"
+                                        ? "👨‍🎓 Student"
+                                        : "🎯 Alumni"
+                                    }
+                                </span>
+                            </div>
+                        `
+                          )
+                          .join("")}
+                    </div>
+                `;
+          membersContent.innerHTML = membersHTML;
+        }
+      }
+
+      function showNoSelection() {
+        const membersHeader = document.getElementById("membersHeader");
+        const membersContent = document.getElementById("membersContent");
+
+        membersHeader.textContent = "👥 Select a batch to view members";
+        membersContent.innerHTML = `
+                <div class="no-selection">
+                    <div class="no-selection-icon">👆</div>
+                    <p>Click on a batch above to see its members</p>
+                </div>
+            `;
+      }
+
+      function goBack() {
+        const userRole = localStorage.getItem("userRole");
+        if (userRole === "STUDENT") {
+          window.location.href = "student-dashboard.html";
+        } else if (userRole === "ALUMNI") {
+          window.location.href = "alumni-dashboard.html";
+        } else {
+          window.location.href = "../index.html";
+        }
+      }
+    </script>
+  </body>
+</html>
