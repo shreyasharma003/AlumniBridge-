@@ -1,629 +1,107 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Connections - Alumni Bridge</title>
-    <link rel="stylesheet" href="../css/professional.css" />
-    <style>
-      body {
-        background-color: var(--bg-light);
-        padding: 20px;
-      }
-
-      .container {
-        max-width: 1200px;
-        margin: 0 auto;
-      }
-
-      .header {
-        background: white;
-        padding: 20px 30px;
-        border-radius: 10px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        margin-bottom: 30px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-
-      .header h1 {
-        color: #333;
-        font-size: 24px;
-      }
-
-      .back-btn {
-        background: #667eea;
-        color: white;
-        border: none;
-        padding: 8px 16px;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 14px;
-      }
-
-      .back-btn:hover {
-        background: #5568d3;
-      }
-
-      .tabs {
-        background: white;
-        padding: 0 30px;
-        border-radius: 10px 10px 0 0;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        display: flex;
-        gap: 0;
-        margin-bottom: 0;
-      }
-
-      .tab-btn {
-        padding: 15px 25px;
-        border: none;
-        background: none;
-        cursor: pointer;
-        font-size: 15px;
-        font-weight: 500;
-        color: #999;
-        border-bottom: 3px solid transparent;
-        transition: all 0.3s;
-      }
-
-      .tab-btn.active {
-        color: #667eea;
-        border-bottom-color: #667eea;
-      }
-
-      .tab-btn:hover {
-        color: #667eea;
-      }
-
-      .tab-content {
-        background: white;
-        padding: 30px;
-        border-radius: 0 10px 10px 10px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        margin-bottom: 30px;
-        display: none;
-      }
-
-      .tab-content.active {
-        display: block;
-      }
-
-      .connections-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-        gap: 20px;
-      }
-
-      .connection-card {
-        background: #f9f9f9;
-        border-radius: 10px;
-        overflow: hidden;
-        border: 2px solid #f0f0f0;
-        transition: all 0.3s;
-      }
-
-      .connection-card:hover {
-        border-color: #667eea;
-        box-shadow: 0 3px 15px rgba(102, 126, 234, 0.2);
-      }
-
-      .connection-header {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        padding: 20px;
-        text-align: center;
-        color: white;
-      }
-
-      .connection-avatar {
-        width: 80px;
-        height: 80px;
-        border-radius: 50%;
-        background: rgba(255, 255, 255, 0.3);
-        margin: 0 auto 15px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 32px;
-        object-fit: cover;
-      }
-
-      .connection-avatar img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-      }
-
-      .connection-name {
-        font-size: 18px;
-        font-weight: 600;
-        margin-bottom: 5px;
-      }
-
-      .connection-role {
-        font-size: 13px;
-        opacity: 0.9;
-      }
-
-      .connection-body {
-        padding: 20px;
-      }
-
-      .connection-info {
-        font-size: 13px;
-        color: #666;
-        margin-bottom: 10px;
-      }
-
-      .connection-badge {
-        display: inline-block;
-        background: #f0f0f0;
-        padding: 5px 10px;
-        border-radius: 20px;
-        font-size: 12px;
-        margin-bottom: 10px;
-        color: #666;
-      }
-
-      .connection-footer {
-        display: flex;
-        gap: 10px;
-      }
-
-      .btn {
-        flex: 1;
-        padding: 10px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 14px;
-        font-weight: 500;
-        transition: background 0.3s;
-      }
-
-      .btn-accept {
-        background: #51cf66;
-        color: white;
-      }
-
-      .btn-accept:hover {
-        background: #40c057;
-      }
-
-      .btn-reject {
-        background: #ff6b6b;
-        color: white;
-      }
-
-      .btn-reject:hover {
-        background: #ee5a52;
-      }
-
-      .btn-chat {
-        background: #667eea;
-        color: white;
-      }
-
-      .btn-chat:hover {
-        background: #5568d3;
-      }
-
-      .btn-remove {
-        background: #f0f0f0;
-        color: #333;
-      }
-
-      .btn-remove:hover {
-        background: #e0e0e0;
-      }
-
-      .empty-state {
-        text-align: center;
-        padding: 60px 20px;
-        color: #666;
-      }
-
-      .empty-state-icon {
-        font-size: 48px;
-        margin-bottom: 20px;
-      }
-
-      .empty-state h2 {
-        font-size: 20px;
-        margin-bottom: 10px;
-        color: #333;
-      }
-
-      .message {
-        padding: 15px;
-        margin-bottom: 15px;
-        border-radius: 5px;
-        display: none;
-      }
-
-      .message.success {
-        background: #d4edda;
-        color: #155724;
-        border: 1px solid #c3e6cb;
-        display: block;
-      }
-
-      .message.error {
-        background: #f8d7da;
-        color: #721c24;
-        border: 1px solid #f5c6cb;
-        display: block;
-      }
-
-      @media (max-width: 768px) {
-        .connections-grid {
-          grid-template-columns: 1fr;
-        }
-
-        .tabs {
-          flex-direction: column;
-        }
-
-        .tab-btn {
-          border-bottom: none;
-          border-left: 3px solid transparent;
-        }
-
-        .tab-btn.active {
-          border-left-color: #667eea;
-          border-bottom: none;
-        }
-      }
-    </style>
-  </head>
-  <body>
-    <div class="container">
-      <div class="header">
-        <h1>🤝 Connections</h1>
-        <button class="back-btn" onclick="goBack()">← Back to Dashboard</button>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Connections | AlumniBridge</title>
+  <link rel="stylesheet" href="../css/connections.css">
+</head>
+<body class="connections-page">
+  <div class="connections-shell">
+    <!-- Header -->
+    <header class="page-header">
+      <div class="header-content">
+        <h1>My Connections</h1>
+        <p>Manage your network - connect with alumni and students</p>
       </div>
-
-      <div id="message" class="message"></div>
-
-      <div class="tabs">
-        <button class="tab-btn active" onclick="switchTab('requests')">
-          📬 Pending Requests
-          <span
-            id="requestCount"
-            style="
-              background: #ff6b6b;
-              color: white;
-              padding: 2px 8px;
-              border-radius: 12px;
-              margin-left: 8px;
-              font-size: 12px;
-            "
-          ></span>
-        </button>
-        <button class="tab-btn" onclick="switchTab('connected')">
-          💬 Active Connections
-          <span
-            id="connectedCount"
-            style="
-              background: #667eea;
-              color: white;
-              padding: 2px 8px;
-              border-radius: 12px;
-              margin-left: 8px;
-              font-size: 12px;
-            "
-          ></span>
-        </button>
+      <div class="header-actions">
+        <button class="btn btn-secondary" onclick="goBack()">← Back to Dashboard</button>
+        <button class="btn btn-logout" onclick="logout()">🚪 Logout</button>
       </div>
+    </header>
 
-      <!-- Pending Requests Tab -->
-      <div id="requests" class="tab-content active">
-        <div id="requestsList" class="connections-grid"></div>
-        <div id="emptyRequests" class="empty-state" style="display: none">
-          <div class="empty-state-icon">📨</div>
-          <h2>No pending requests</h2>
-          <p>You're all caught up!</p>
+    <!-- Alert Container -->
+    <div id="alertContainer" class="alert-container"></div>
+
+    <!-- Tabs Navigation -->
+    <nav class="tabs-nav" role="tablist">
+      <button class="tab-btn active" data-tab="all-users" role="tab" aria-selected="true">
+        All Users
+        <span class="tab-count" id="allUsersCount">0</span>
+      </button>
+      <button class="tab-btn" data-tab="sent-requests" role="tab" aria-selected="false">
+        Sent Requests
+        <span class="tab-count" id="sentCount">0</span>
+      </button>
+      <button class="tab-btn" data-tab="received-requests" role="tab" aria-selected="false">
+        Received Requests
+        <span class="tab-count" id="receivedCount">0</span>
+      </button>
+      <button class="tab-btn" data-tab="my-connections" role="tab" aria-selected="false">
+        My Connections
+        <span class="tab-count" id="connectionsCount">0</span>
+      </button>
+    </nav>
+
+    <!-- Tab Panels -->
+    <main class="tabs-content">
+      <!-- All Users Panel -->
+      <section id="all-users" class="tab-panel active" role="tabpanel">
+        <div class="panel-header">
+          <div>
+            <h2>Discover People</h2>
+            <p>Find and connect with alumni and students</p>
+          </div>
+          <div class="search-box">
+            <input type="search" id="searchAllUsers" placeholder="Search by name, email, degree..." autocomplete="off">
+          </div>
         </div>
-      </div>
-
-      <!-- Active Connections Tab -->
-      <div id="connected" class="tab-content">
-        <div id="connectedList" class="connections-grid"></div>
-        <div id="emptyConnected" class="empty-state" style="display: none">
-          <div class="empty-state-icon">🔗</div>
-          <h2>No active connections</h2>
-          <p>Start by sending connection requests from the Network section</p>
+        <div id="allUsersGrid" class="users-grid">
+          <div class="loading"><div class="spinner"></div></div>
         </div>
-      </div>
-    </div>
+      </section>
 
-    <script src="../js/api.js"></script>
-    <script>
-      let currentUserId = null;
-      let pendingRequests = [];
-      let activeConnections = [];
+      <!-- Sent Requests Panel -->
+      <section id="sent-requests" class="tab-panel" role="tabpanel">
+        <div class="panel-header">
+          <div>
+            <h2>Sent Requests</h2>
+            <p>Connection requests you have sent</p>
+          </div>
+        </div>
+        <div id="sentRequestsGrid" class="users-grid">
+          <div class="loading"><div class="spinner"></div></div>
+        </div>
+      </section>
 
-      document.addEventListener("DOMContentLoaded", function () {
-        checkAuth();
-        currentUserId = localStorage.getItem("userId");
-        loadConnections();
-        // Refresh connections every 10 seconds
-        setInterval(loadConnections, 10000);
-      });
+      <!-- Received Requests Panel -->
+      <section id="received-requests" class="tab-panel" role="tabpanel">
+        <div class="panel-header">
+          <div>
+            <h2>Received Requests</h2>
+            <p>Pending requests from other users</p>
+          </div>
+        </div>
+        <div id="receivedRequestsGrid" class="users-grid">
+          <div class="loading"><div class="spinner"></div></div>
+        </div>
+      </section>
 
-      function checkAuth() {
-        const token = localStorage.getItem("token");
-        if (!token) {
-          window.location.href = "login.html";
-        }
-      }
+      <!-- My Connections Panel -->
+      <section id="my-connections" class="tab-panel" role="tabpanel">
+        <div class="panel-header">
+          <div>
+            <h2>My Connections</h2>
+            <p>People you are connected with</p>
+          </div>
+        </div>
+        <div id="connectionsGrid" class="users-grid">
+          <div class="loading"><div class="spinner"></div></div>
+        </div>
+      </section>
+    </main>
+  </div>
 
-      async function loadConnections() {
-        try {
-          // Load pending requests
-          const requests = await getPendingConnectionRequests();
-          pendingRequests = requests || [];
-
-          // Load active connections
-          const connections = await getActiveConnections();
-          activeConnections = connections || [];
-
-          displayPendingRequests();
-          displayActiveConnections();
-        } catch (error) {
-          console.error("Failed to load connections:", error);
-          showMessage("Failed to load connections", "error");
-        }
-      }
-
-      function displayPendingRequests() {
-        const list = document.getElementById("requestsList");
-        const empty = document.getElementById("emptyRequests");
-        const count = document.getElementById("requestCount");
-
-        if (!pendingRequests || pendingRequests.length === 0) {
-          list.innerHTML = "";
-          empty.style.display = "block";
-          count.textContent = "";
-          return;
-        }
-
-        empty.style.display = "none";
-        count.textContent = pendingRequests.length;
-
-        list.innerHTML = pendingRequests
-          .map(
-            (request) => `
-                <div class="connection-card">
-                    <div class="connection-header">
-                        <div class="connection-avatar">
-                            ${
-                              request.sender.profile?.pictureUrl
-                                ? `<img src="${request.sender.profile.pictureUrl}" alt="${request.sender.name}">`
-                                : "👤"
-                            }
-                        </div>
-                        <div class="connection-name">${
-                          request.sender.name
-                        }</div>
-                        <div class="connection-role">${
-                          request.sender.role
-                        }</div>
-                    </div>
-                    <div class="connection-body">
-                        ${
-                          request.sender.profile?.headline
-                            ? `<div class="connection-badge">${escapeHtml(
-                                request.sender.profile.headline
-                              )}</div>`
-                            : ""
-                        }
-                        <div class="connection-info">
-                            <strong>📚 Batch:</strong> ${
-                              request.sender.profile?.batchYear || "N/A"
-                            }
-                        </div>
-                        <div class="connection-info">
-                            <strong>🎓 Degree:</strong> ${
-                              request.sender.profile?.degreeName || "N/A"
-                            }
-                        </div>
-                        <div class="connection-info">
-                            <strong>📍 Location:</strong> ${
-                              request.sender.profile?.location || "N/A"
-                            }
-                        </div>
-                        <div class="connection-footer">
-                            <button class="btn btn-accept" onclick="acceptRequest(${
-                              request.id
-                            })">
-                                ✓ Accept
-                            </button>
-                            <button class="btn btn-reject" onclick="rejectRequest(${
-                              request.id
-                            })">
-                                ✕ Reject
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            `
-          )
-          .join("");
-      }
-
-      function displayActiveConnections() {
-        const list = document.getElementById("connectedList");
-        const empty = document.getElementById("emptyConnected");
-        const count = document.getElementById("connectedCount");
-
-        if (!activeConnections || activeConnections.length === 0) {
-          list.innerHTML = "";
-          empty.style.display = "block";
-          count.textContent = "";
-          return;
-        }
-
-        empty.style.display = "none";
-        count.textContent = activeConnections.length;
-
-        list.innerHTML = activeConnections
-          .map(
-            (connection) => `
-                <div class="connection-card">
-                    <div class="connection-header">
-                        <div class="connection-avatar">
-                            ${
-                              connection.profile?.pictureUrl
-                                ? `<img src="${connection.profile.pictureUrl}" alt="${connection.name}">`
-                                : "👤"
-                            }
-                        </div>
-                        <div class="connection-name">${connection.name}</div>
-                        <div class="connection-role">${connection.role}</div>
-                    </div>
-                    <div class="connection-body">
-                        ${
-                          connection.profile?.headline
-                            ? `<div class="connection-badge">${escapeHtml(
-                                connection.profile.headline
-                              )}</div>`
-                            : ""
-                        }
-                        <div class="connection-info">
-                            <strong>📚 Batch:</strong> ${
-                              connection.profile?.batchYear || "N/A"
-                            }
-                        </div>
-                        <div class="connection-info">
-                            <strong>🎓 Degree:</strong> ${
-                              connection.profile?.degreeName || "N/A"
-                            }
-                        </div>
-                        <div class="connection-info">
-                            <strong>📍 Location:</strong> ${
-                              connection.profile?.location || "N/A"
-                            }
-                        </div>
-                        <div class="connection-info">
-                            <strong>📧 Bio:</strong> ${
-                              connection.profile?.bio || "No bio"
-                            }
-                        </div>
-                        <div class="connection-footer">
-                            <button class="btn btn-chat" onclick="openChat(${
-                              connection.id
-                            }, '${connection.name}')">
-                                💬 Chat
-                            </button>
-                            <button class="btn btn-remove" onclick="removeConnection(${
-                              connection.id
-                            })">
-                                🗑️ Remove
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            `
-          )
-          .join("");
-      }
-
-      async function acceptRequest(requestId) {
-        try {
-          await acceptConnectionRequest(requestId);
-          showMessage("Connection request accepted!", "success");
-          setTimeout(() => {
-            loadConnections();
-          }, 1000);
-        } catch (error) {
-          console.error("Failed to accept request:", error);
-          showMessage("Failed to accept request", "error");
-        }
-      }
-
-      async function rejectRequest(requestId) {
-        if (!confirm("Are you sure you want to reject this request?")) return;
-
-        try {
-          await rejectConnectionRequest(requestId);
-          showMessage("Connection request rejected", "success");
-          setTimeout(() => {
-            loadConnections();
-          }, 1000);
-        } catch (error) {
-          console.error("Failed to reject request:", error);
-          showMessage("Failed to reject request", "error");
-        }
-      }
-
-      async function removeConnection(userId) {
-        if (!confirm("Are you sure you want to remove this connection?"))
-          return;
-
-        try {
-          await disconnectUser(userId);
-          showMessage("Connection removed", "success");
-          setTimeout(() => {
-            loadConnections();
-          }, 1000);
-        } catch (error) {
-          console.error("Failed to remove connection:", error);
-          showMessage("Failed to remove connection", "error");
-        }
-      }
-
-      function openChat(userId, userName) {
-        // Store the chat target and redirect to chat page
-        localStorage.setItem("chatUserId", userId);
-        localStorage.setItem("chatUserName", userName);
-        window.location.href = "chat.html";
-      }
-
-      function switchTab(tabName) {
-        // Hide all tabs
-        document.getElementById("requests").classList.remove("active");
-        document.getElementById("connected").classList.remove("active");
-
-        // Show selected tab
-        document.getElementById(tabName).classList.add("active");
-
-        // Update button styles
-        document.querySelectorAll(".tab-btn").forEach((btn) => {
-          btn.classList.remove("active");
-        });
-        event.target.closest(".tab-btn").classList.add("active");
-      }
-
-      function showMessage(text, type) {
-        const messageDiv = document.getElementById("message");
-        messageDiv.textContent = text;
-        messageDiv.className = `message ${type}`;
-
-        if (type === "success") {
-          setTimeout(() => {
-            messageDiv.className = "message";
-          }, 3000);
-        }
-      }
-
-      function escapeHtml(text) {
-        const div = document.createElement("div");
-        div.textContent = text;
-        return div.innerHTML;
-      }
-
-      function goBack() {
-        const userRole = localStorage.getItem("userRole");
-        if (userRole === "STUDENT") {
-          window.location.href = "student-dashboard.html";
-        } else if (userRole === "ALUMNI") {
-          window.location.href = "alumni-dashboard.html";
-        } else {
-          window.location.href = "../index.html";
-        }
-      }
-    </script>
-  </body>
+  <script src="../js/connections.js"></script>
+</body>
 </html>

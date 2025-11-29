@@ -1,511 +1,115 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Network - Alumni Bridge</title>
-    <link rel="stylesheet" href="../css/professional.css" />
-    <style>
-      body {
-        background-color: var(--bg-light);
-      }
-
-      .container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 20px;
-      }
-
-      .header {
-        background: white;
-        padding: 20px 30px;
-        border-radius: 8px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-        margin-bottom: 30px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-
-      .header h1 {
-        color: var(--text-primary);
-        font-size: 24px;
-        margin: 0;
-      }
-
-      .back-btn {
-        background: var(--primary);
-        color: white;
-        border: none;
-        padding: 8px 16px;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 14px;
-        transition: background 0.3s;
-      }
-
-      .back-btn:hover {
-        background: var(--primary-dark);
-      }
-
-      .filters {
-        background: white;
-        padding: 20px 30px;
-        border-radius: 8px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-        margin-bottom: 30px;
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 15px;
-        align-items: end;
-      }
-
-      .filter-group {
-        display: flex;
-        flex-direction: column;
-        gap: 5px;
-      }
-
-      .filter-group label {
-        font-size: 13px;
-        color: var(--text-secondary);
-        font-weight: 500;
-      }
-
-      .filters input,
-      .filters select {
-        padding: 8px 12px;
-        border: 1px solid var(--border-color);
-        border-radius: 5px;
-        font-size: 14px;
-      }
-
-      .filters input:focus,
-      .filters select:focus {
-        outline: none;
-        border-color: var(--primary);
-      }
-
-      .filters button {
-        background: var(--primary);
-        color: white;
-        border: none;
-        padding: 8px 20px;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 14px;
-        font-weight: 500;
-        transition: background 0.3s;
-      }
-
-      .filters button:hover {
-        background: var(--primary-dark);
-      }
-
-      .users-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-        gap: 20px;
-      }
-
-      .user-card {
-        background: white;
-        border-radius: 8px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-        overflow: hidden;
-        transition: transform 0.3s, box-shadow 0.3s;
-        border-left: 4px solid var(--primary);
-      }
-
-      .user-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.12);
-      }
-
-      .user-header {
-        background: linear-gradient(
-          135deg,
-          var(--primary) 0%,
-          var(--primary-dark) 100%
-        );
-        padding: 30px 20px;
-        text-align: center;
-        color: white;
-      }
-
-      .user-avatar {
-        width: 80px;
-        height: 80px;
-        border-radius: 50%;
-        background: rgba(255, 255, 255, 0.2);
-        margin: 0 auto 15px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 32px;
-        object-fit: cover;
-      }
-
-      .user-avatar img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-      }
-
-      .user-name {
-        font-size: 18px;
-        font-weight: 600;
-        margin: 0 0 5px 0;
-      }
-
-      .user-role {
-        font-size: 13px;
-        opacity: 0.9;
-        margin: 0;
-      }
-
-      .user-body {
-        padding: 20px;
-      }
-
-      .user-info {
-        font-size: 13px;
-        color: var(--text-secondary);
-        margin-bottom: 10px;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-      }
-
-      .user-info-label {
-        font-weight: 500;
-        color: var(--text-secondary);
-      }
-
-      .user-headline {
-        font-size: 14px;
-        color: var(--text-primary);
-        margin-bottom: 15px;
-        font-style: italic;
-      }
-
-      .user-footer {
-        display: flex;
-        gap: 10px;
-      }
-
-      .btn {
-        flex: 1;
-        padding: 10px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 14px;
-        font-weight: 500;
-        transition: background 0.3s;
-      }
-
-      .btn-connect {
-        background: var(--primary);
-        color: white;
-      }
-
-      .btn-connect:hover:not(:disabled) {
-        background: var(--primary-dark);
-      }
-
-      .btn-connected {
-        background: var(--success);
-        color: white;
-      }
-
-      .btn-connected:hover {
-        background: #40c057;
-      }
-
-      .btn-view {
-        background: var(--bg-light);
-        color: var(--text-primary);
-      }
-
-      .btn-view:hover {
-        background: var(--grey-lighter);
-      }
-
-      .empty-state {
-        text-align: center;
-        padding: 60px 20px;
-        color: var(--text-secondary);
-      }
-
-      .empty-state-icon {
-        font-size: 64px;
-        margin-bottom: 20px;
-      }
-
-      .empty-state h2 {
-        font-size: 24px;
-        margin-bottom: 10px;
-        color: var(--text-primary);
-      }
-
-      @media (max-width: 768px) {
-        .users-grid {
-          grid-template-columns: 1fr;
-        }
-
-        .filters {
-          grid-template-columns: 1fr;
-        }
-
-        .header {
-          flex-direction: column;
-          gap: 15px;
-        }
-      }
-    </style>
-  </head>
-  <body>
-    <div class="container">
-      <div class="header">
-        <h1>🤝 Network</h1>
-        <div style="display: flex; gap: 10px">
-          <button
-            class="back-btn"
-            onclick="window.location.href='connections.html'"
-            style="background: #51cf66"
-          >
-            📬 My Connections
-          </button>
-          <button class="back-btn" onclick="goBack()">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AlumniBridge | Network</title>
+  <link rel="stylesheet" href="../css/network.css">
+</head>
+<body class="network-page">
+  <div class="network-shell">
+    <header class="network-header">
+      <div class="header-top">
+        <div class="header-left">
+          <h1>My Network</h1>
+          <p>Discover peers, respond to connection requests, and track invitations you've sent.</p>
+        </div>
+        <div class="header-actions">
+          <button class="btn btn-secondary" onclick="goBack()">
             ← Back to Dashboard
           </button>
+          <button class="btn btn-logout" onclick="logout()">
+            🚪 Logout
+          </button>
         </div>
       </div>
+      <input
+        id="networkSearchInput"
+        type="search"
+        class="search-field"
+        placeholder="Search people by name, degree, institute, or skills"
+        autocomplete="off"
+      >
+    </header>
 
-      <div class="filters">
-        <div class="filter-group">
-          <label>Search</label>
-          <input
-            type="text"
-            id="searchInput"
-            placeholder="Search by name..."
-            onkeyup="filterUsers()"
-          />
-        </div>
-        <div class="filter-group">
-          <label>Batch Year</label>
-          <select id="batchFilter" onchange="filterUsers()">
-            <option value="">All Batches</option>
-          </select>
-        </div>
-        <div class="filter-group">
-          <label>Degree</label>
-          <select id="degreeFilter" onchange="filterUsers()">
-            <option value="">All Degrees</option>
-          </select>
-        </div>
-        <button onclick="clearFilters()">Clear Filters</button>
-      </div>
+    <div id="networkAlert" class="alert hidden" role="alert"></div>
 
-      <div id="usersList" class="users-grid"></div>
+    <nav class="tabs" role="tablist">
+      <button
+        type="button"
+        class="tab-btn active"
+        data-tab="tab-all"
+        aria-selected="true"
+        aria-controls="tab-all"
+      >
+        All Users
+      </button>
+      <button
+        type="button"
+        class="tab-btn"
+        data-tab="tab-received"
+        aria-selected="false"
+        aria-controls="tab-received"
+      >
+        Received Requests <span id="receivedBadge" class="tab-badge hidden">0</span>
+      </button>
+      <button
+        type="button"
+        class="tab-btn"
+        data-tab="tab-sent"
+        aria-selected="false"
+        aria-controls="tab-sent"
+      >
+        Sent Requests <span id="sentBadge" class="tab-badge hidden">0</span>
+      </button>
+    </nav>
 
-      <div id="emptyState" class="empty-state" style="display: none">
-        <div class="empty-state-icon">🔍</div>
-        <h2>No users found</h2>
-        <p>Try adjusting your search filters</p>
-      </div>
-    </div>
+    <main>
+      <section id="tab-all" class="tab-panel active" role="tabpanel">
+        <header class="panel-header">
+          <div>
+            <h2>All Users</h2>
+            <p>Send connection requests to people you'd like to connect with.</p>
+          </div>
+          <div class="sort-controls">
+            <label for="sortSelect">Sort by:</label>
+            <select id="sortSelect" class="sort-select">
+              <option value="name">Name (A-Z)</option>
+              <option value="name-desc">Name (Z-A)</option>
+              <option value="batch">Batch (Newest)</option>
+              <option value="batch-asc">Batch (Oldest)</option>
+              <option value="degree">Degree</option>
+              <option value="role">Role</option>
+            </select>
+          </div>
+        </header>
+        <div id="allUsersContainer" class="card-grid"></div>
+      </section>
 
-    <script src="../js/api.js"></script>
-    <script>
-      let allUsers = [];
-      let allBatches = [];
-      let allDegrees = [];
-      let currentUserId = null;
-      let connectedUsers = new Set();
+      <section id="tab-received" class="tab-panel" role="tabpanel" aria-hidden="true">
+        <header class="panel-header">
+          <div>
+            <h2>Received Requests</h2>
+            <p>Accept or reject pending invitations from other members.</p>
+          </div>
+          <span id="receivedCount" class="count-badge">0 pending</span>
+        </header>
+        <div id="receivedContainer" class="card-grid"></div>
+      </section>
 
-      document.addEventListener("DOMContentLoaded", function () {
-        checkAuth();
-        currentUserId = localStorage.getItem("userId");
-        loadBatches();
-        loadDegrees();
-        loadUsers();
-      });
+      <section id="tab-sent" class="tab-panel" role="tabpanel" aria-hidden="true">
+        <header class="panel-header">
+          <div>
+            <h2>Sent Requests</h2>
+            <p>Track the status of the requests you've sent and cancel if needed.</p>
+          </div>
+          <span id="sentCount" class="count-badge">0 pending</span>
+        </header>
+        <div id="sentContainer" class="card-grid"></div>
+      </section>
+    </main>
+  </div>
 
-      function checkAuth() {
-        const token = localStorage.getItem("token");
-        if (!token) {
-          window.location.href = "login.html";
-        }
-      }
-
-      async function loadBatches() {
-        try {
-          const response = await apiCall("/batches", { method: "GET" });
-          allBatches = response;
-          const batchSelect = document.getElementById("batchFilter");
-          allBatches.forEach((batch) => {
-            const option = document.createElement("option");
-            option.value = batch.id;
-            option.textContent = batch.year;
-            batchSelect.appendChild(option);
-          });
-        } catch (error) {
-          console.error("Failed to load batches:", error);
-        }
-      }
-
-      async function loadDegrees() {
-        try {
-          const response = await apiCall("/degrees", { method: "GET" });
-          allDegrees = response;
-          const degreeSelect = document.getElementById("degreeFilter");
-          allDegrees.forEach((degree) => {
-            const option = document.createElement("option");
-            option.value = degree.id;
-            option.textContent = degree.name;
-            degreeSelect.appendChild(option);
-          });
-        } catch (error) {
-          console.error("Failed to load degrees:", error);
-        }
-      }
-
-      async function loadUsers() {
-        try {
-          const response = await apiCall("/users/search?role=STUDENT,ALUMNI", {
-            method: "GET",
-          });
-          allUsers = response.filter((user) => user.id != currentUserId);
-          displayUsers(allUsers);
-        } catch (error) {
-          console.error("Failed to load users:", error);
-        }
-      }
-
-      function displayUsers(users) {
-        const usersList = document.getElementById("usersList");
-        const emptyState = document.getElementById("emptyState");
-
-        if (!users || users.length === 0) {
-          usersList.innerHTML = "";
-          emptyState.style.display = "block";
-          return;
-        }
-
-        emptyState.style.display = "none";
-        usersList.innerHTML = users
-          .map((user) => {
-            const profile = user.profile || {};
-            return `
-                    <div class="user-card">
-                        <div class="user-header">
-                            <div class="user-avatar">👤</div>
-                            <div class="user-name">${user.name}</div>
-                            <div class="user-role">${user.role}</div>
-                        </div>
-                        <div class="user-body">
-                            ${
-                              profile.headline
-                                ? `<div class="user-headline">${profile.headline}</div>`
-                                : ""
-                            }
-                            <div class="user-info">
-                                <span class="user-info-label">📚 Batch:</span>
-                                <span>${profile.batchYear || "N/A"}</span>
-                            </div>
-                            <div class="user-info">
-                                <span class="user-info-label">🎓 Degree:</span>
-                                <span>${profile.degreeName || "N/A"}</span>
-                            </div>
-                            <div class="user-info">
-                                <span class="user-info-label">📍 Location:</span>
-                                <span>${profile.location || "N/A"}</span>
-                            </div>
-                            <div class="user-footer">
-                                <button class="btn btn-view" onclick="viewProfile(${
-                                  user.id
-                                })">View Profile</button>
-                                <button class="btn btn-connect" onclick="sendConnectionRequest(${
-                                  user.id
-                                }, '${user.name}')" 
-                                        id="btn-${user.id}">
-                                    + Connect
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-          })
-          .join("");
-      }
-
-      async function sendConnectionRequest(userId, userName) {
-        try {
-          // Call the API to send connection request
-          await apiCall(`/users/connect/${userId}`, { method: "POST" });
-          connectedUsers.add(userId);
-
-          const btn = document.getElementById(`btn-${userId}`);
-          btn.className = "btn btn-connected";
-          btn.textContent = "✓ Request Sent";
-          btn.disabled = true;
-        } catch (error) {
-          console.error("Failed to send connection request:", error);
-          alert("Failed to send connection request");
-        }
-      }
-
-      function viewProfile(userId) {
-        // In a full implementation, this would navigate to a detailed profile view
-        const user = allUsers.find((u) => u.id === userId);
-        if (user) {
-          alert(`Profile: ${user.name}\n${user.email}`);
-        }
-      }
-
-      function filterUsers() {
-        const searchTerm = document
-          .getElementById("searchInput")
-          .value.toLowerCase();
-        const batchId = document.getElementById("batchFilter").value;
-        const degreeId = document.getElementById("degreeFilter").value;
-
-        const filtered = allUsers.filter((user) => {
-          const profile = user.profile || {};
-
-          const matchesSearch =
-            !searchTerm ||
-            user.name.toLowerCase().includes(searchTerm) ||
-            user.email.toLowerCase().includes(searchTerm);
-
-          const matchesBatch = !batchId || profile.batchId == batchId;
-          const matchesDegree = !degreeId || profile.degreeId == degreeId;
-
-          return matchesSearch && matchesBatch && matchesDegree;
-        });
-
-        displayUsers(filtered);
-      }
-
-      function clearFilters() {
-        document.getElementById("searchInput").value = "";
-        document.getElementById("batchFilter").value = "";
-        document.getElementById("degreeFilter").value = "";
-        displayUsers(allUsers);
-      }
-
-      function goBack() {
-        const userRole = localStorage.getItem("userRole");
-        if (userRole === "STUDENT") {
-          window.location.href = "student-dashboard.html";
-        } else if (userRole === "ALUMNI") {
-          window.location.href = "alumni-dashboard.html";
-        } else {
-          window.location.href = "../index.html";
-        }
-      }
-    </script>
-  </body>
+  <script src="../js/network.js" defer></script>
+</body>
 </html>

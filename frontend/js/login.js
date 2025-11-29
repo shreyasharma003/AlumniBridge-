@@ -7,7 +7,7 @@
 
 // Hardcoded Admin Credentials (in production, this should be validated server-side)
 const ADMIN_CREDENTIALS = {
-  id: "admin@gmail.com",
+  id: "testadmin@gmail.com",
   password: "admin123",
 };
 
@@ -171,28 +171,41 @@ async function handleAdminLoginSubmit(e) {
     return;
   }
 
-  // Verify admin credentials (client-side check - ideally should be server-side)
-  if (
-    adminId !== ADMIN_CREDENTIALS.id ||
-    adminPassword !== ADMIN_CREDENTIALS.password
-  ) {
-    const errorEl = document.getElementById("adminLoginError");
-    errorEl.textContent = "Invalid admin credentials";
-    showError("Invalid admin ID or password");
-    return;
+  // Show loading state
+  const submitBtn = document.querySelector('#adminLoginForm button[type="submit"]');
+  const originalText = submitBtn.textContent;
+  submitBtn.disabled = true;
+  submitBtn.textContent = "Logging in...";
+
+  try {
+    // Call backend API for admin login using authLogin from api.js
+    const response = await authLogin("testadmin@gmail.com", adminPassword);
+
+    if (response.error) {
+      document.getElementById("adminLoginError").textContent = response.error;
+      showError(response.error);
+      return;
+    }
+
+    // Store auth data
+    setAuthToken(response.token);
+    localStorage.setItem("userId", response.userId);
+    localStorage.setItem("userRole", response.role);
+    localStorage.setItem("userEmail", "testadmin@gmail.com");
+
+    showSuccess("Admin login successful! Redirecting...");
+
+    setTimeout(() => {
+      window.location.href = "admin-dashboard.html";
+    }, 1000);
+  } catch (error) {
+    console.error("Admin login error:", error);
+    document.getElementById("adminLoginError").textContent = "Login failed. Please try again.";
+    showError("Login failed. Please try again.");
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = originalText;
   }
-
-  // Login successful - set admin tokens
-  setAuthToken("admin-" + Date.now());
-  localStorage.setItem("userId", "0");
-  localStorage.setItem("userRole", "ADMIN");
-  localStorage.setItem("userEmail", "admin@alumnibridge.com");
-
-  showSuccess("Admin login successful! Redirecting...");
-
-  setTimeout(() => {
-    window.location.href = "admin-dashboard.html";
-  }, 1000);
 }
 
 /**

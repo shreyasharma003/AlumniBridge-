@@ -48,13 +48,17 @@ async function populateDropdowns() {
 
     const degreeSelect = document.getElementById("degreeName");
     if (degreeSelect && degrees && Array.isArray(degrees)) {
-      degrees.forEach((degree) => {
+      // Deduplicate degrees by name using Set
+      const uniqueDegreeNames = [...new Set(degrees.map(d => d.name))];
+      console.log("Unique degrees:", uniqueDegreeNames);
+      
+      uniqueDegreeNames.forEach((degreeName) => {
         const option = document.createElement("option");
-        option.value = degree.name;
-        option.textContent = degree.name;
+        option.value = degreeName;
+        option.textContent = degreeName;
         degreeSelect.appendChild(option);
       });
-      console.log("Degrees populated successfully");
+      console.log("Degrees populated successfully (deduplicated)");
     } else {
       console.warn("No degrees returned or invalid response");
     }

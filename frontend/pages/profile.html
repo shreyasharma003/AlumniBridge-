@@ -17,10 +17,10 @@
       }
 
       .header {
-        background: white;
+        background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
         padding: 20px 30px;
         border-radius: 8px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        box-shadow: 0 4px 15px rgba(30, 58, 95, 0.3);
         margin-bottom: 30px;
         display: flex;
         justify-content: space-between;
@@ -28,24 +28,50 @@
       }
 
       .header h1 {
-        color: var(--text-primary);
+        color: var(--text-white);
         font-size: 24px;
         margin: 0;
       }
 
+      .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+
       .back-btn {
-        background: var(--primary);
-        color: white;
-        border: none;
-        padding: 8px 16px;
+        background: rgba(255, 255, 255, 0.15);
+        color: var(--text-white);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        padding: 10px 20px;
         border-radius: 5px;
         cursor: pointer;
         font-size: 14px;
-        transition: background 0.3s;
+        font-weight: 500;
+        transition: all 0.3s;
       }
 
       .back-btn:hover {
-        background: var(--primary-dark);
+        background: rgba(255, 255, 255, 0.25);
+        border-color: rgba(255, 255, 255, 0.5);
+        transform: translateY(-2px);
+      }
+
+      .logout-btn {
+        background: rgba(255, 255, 255, 0.15);
+        color: var(--text-white);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 500;
+        transition: all 0.3s;
+      }
+
+      .logout-btn:hover {
+        background: rgba(255, 255, 255, 0.25);
+        transform: translateY(-2px);
       }
 
       .profile-card {
@@ -290,8 +316,11 @@
   <body>
     <div class="container">
       <div class="header">
-        <h1>My Profile</h1>
-        <button class="back-btn" onclick="goBack()">← Back to Dashboard</button>
+        <h1>📋 My Profile</h1>
+        <div class="header-actions">
+          <button class="back-btn" onclick="goBack()">← Back to Dashboard</button>
+          <button class="logout-btn" onclick="logout()">🚪 Logout</button>
+        </div>
       </div>
 
       <div class="profile-card">
@@ -731,6 +760,15 @@
         } else {
           window.location.href = "../index.html";
         }
+      }
+
+      function logout() {
+        localStorage.removeItem("token");
+        localStorage.removeItem("userId");
+        localStorage.removeItem("userRole");
+        localStorage.removeItem("userEmail");
+        localStorage.removeItem("userName");
+        window.location.href = "login.html";
       }
     </script>
   </body>

@@ -34,6 +34,9 @@ function renderNavbar(activePage = "") {
                 <li><a href="#about" class="${
                   activePage === "about" ? "active" : ""
                 }">About</a></li>
+                <li><a href="/frontend/pages/network.html" class="${
+                  activePage === "network" ? "active" : ""
+                }">Network</a></li>
                 <li><a href="/frontend/pages/batches.html" class="${
                   activePage === "batches" ? "active" : ""
                 }">Batches</a></li>
@@ -54,6 +57,7 @@ function renderNavbar(activePage = "") {
                         </div>
                         <div class="dropdown-menu" id="userDropdown">
                             <a href="/frontend/pages/profile.html">My Profile</a>
+                            <a href="/frontend/pages/connections.html">My Connections</a>
                             <div class="dropdown-divider"></div>
                             ${
                               isAlumni
@@ -273,14 +277,3 @@ function setActiveNavLink(pageName) {
     activeLink.classList.add("active");
   }
 }
-
-export {
-  renderNavbar,
-  renderFooter,
-  handleLogout,
-  initializePage,
-  createAlertContainer,
-  isInIframe,
-  updateUserAvatar,
-  setActiveNavLink,
-};

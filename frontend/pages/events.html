@@ -1,555 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Events - Alumni Bridge</title>
-    <link rel="stylesheet" href="../css/professional.css" />
-    <style>
-      body {
-        background-color: var(--bg-light);
-        padding: 20px;
-      }
-
-      .container {
-        max-width: 1200px;
-        margin: 0 auto;
-      }
-
-      .header {
-        background: white;
-        padding: 20px 30px;
-        border-radius: 10px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        margin-bottom: 30px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-
-      .header h1 {
-        color: #333;
-        font-size: 24px;
-      }
-
-      .back-btn {
-        background: #667eea;
-        color: white;
-        border: none;
-        padding: 8px 16px;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 14px;
-      }
-
-      .back-btn:hover {
-        background: #5568d3;
-      }
-
-      .filters {
-        background: white;
-        padding: 20px 30px;
-        border-radius: 10px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        margin-bottom: 30px;
-        display: flex;
-        gap: 15px;
-        align-items: center;
-        flex-wrap: wrap;
-      }
-
-      .filters input,
-      .filters select {
-        padding: 8px 15px;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        font-size: 14px;
-      }
-
-      .filters input:focus,
-      .filters select:focus {
-        outline: none;
-        border-color: #667eea;
-      }
-
-      .filters button {
-        background: #667eea;
-        color: white;
-        border: none;
-        padding: 8px 20px;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 14px;
-      }
-
-      .filters button:hover {
-        background: #5568d3;
-      }
-
-      .events-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-        gap: 20px;
-      }
-
-      .event-card {
-        background: white;
-        border-radius: 10px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        overflow: hidden;
-        transition: transform 0.3s, box-shadow 0.3s;
-      }
-
-      .event-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
-      }
-
-      .event-header {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        padding: 20px;
-        color: white;
-      }
-
-      .event-title {
-        font-size: 18px;
-        font-weight: 600;
-        margin-bottom: 8px;
-      }
-
-      .event-date {
-        font-size: 14px;
-        opacity: 0.9;
-      }
-
-      .event-body {
-        padding: 20px;
-      }
-
-      .event-description {
-        color: #666;
-        margin-bottom: 15px;
-        line-height: 1.5;
-      }
-
-      .event-info {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 10px;
-        margin-bottom: 15px;
-        font-size: 14px;
-      }
-
-      .event-info-item {
-        display: flex;
-        gap: 8px;
-        align-items: center;
-      }
-
-      .event-info-label {
-        color: #999;
-      }
-
-      .event-info-value {
-        color: #333;
-        font-weight: 500;
-      }
-
-      .event-footer {
-        display: flex;
-        gap: 10px;
-      }
-
-      .btn {
-        flex: 1;
-        padding: 10px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 14px;
-        font-weight: 500;
-        transition: background 0.3s;
-      }
-
-      .btn-register {
-        background: #667eea;
-        color: white;
-      }
-
-      .btn-register:hover:not(:disabled) {
-        background: #5568d3;
-      }
-
-      .btn-registered {
-        background: #51cf66;
-        color: white;
-      }
-
-      .btn-registered:hover {
-        background: #40c057;
-      }
-
-      .btn-details {
-        background: #f0f0f0;
-        color: #333;
-      }
-
-      .btn-details:hover {
-        background: #e0e0e0;
-      }
-
-      .empty-state {
-        text-align: center;
-        padding: 60px 20px;
-        color: white;
-      }
-
-      .empty-state-icon {
-        font-size: 64px;
-        margin-bottom: 20px;
-      }
-
-      .empty-state h2 {
-        font-size: 24px;
-        margin-bottom: 10px;
-      }
-
-      .modal {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: rgba(0, 0, 0, 0.5);
-        z-index: 1000;
-        align-items: center;
-        justify-content: center;
-      }
-
-      .modal.active {
-        display: flex;
-      }
-
-      .modal-content {
-        background: white;
-        border-radius: 10px;
-        padding: 30px;
-        max-width: 600px;
-        width: 90%;
-        max-height: 80vh;
-        overflow-y: auto;
-      }
-
-      .modal-header {
-        font-size: 24px;
-        font-weight: 600;
-        color: #333;
-        margin-bottom: 15px;
-      }
-
-      .modal-close {
-        float: right;
-        font-size: 28px;
-        font-weight: bold;
-        color: #999;
-        cursor: pointer;
-      }
-
-      .modal-close:hover {
-        color: #333;
-      }
-
-      .modal-text {
-        color: #666;
-        line-height: 1.6;
-        margin-bottom: 10px;
-      }
-
-      @media (max-width: 768px) {
-        .events-grid {
-          grid-template-columns: 1fr;
-        }
-
-        .filters {
-          flex-direction: column;
-          align-items: stretch;
-        }
-
-        .filters input,
-        .filters select,
-        .filters button {
-          width: 100%;
-        }
-      }
-    </style>
-  </head>
-  <body>
+    <link rel="stylesheet" href="../css/events.css">
+</head>
+<body>
     <div class="container">
-      <div class="header">
-        <h1>📅 Events</h1>
-        <button class="back-btn" onclick="goBack()">← Back to Dashboard</button>
-      </div>
+        <!-- Header -->
+        <header class="header">
+            <h1>🎉 Events</h1>
+            <div class="header-actions">
+                <button class="btn btn-secondary" onclick="goBack()">
+                    ← Back to Dashboard
+                </button>
+                <button class="btn btn-logout" onclick="logout()">
+                    🚪 Logout
+                </button>
+            </div>
+        </header>
 
-      <div class="filters">
-        <input
-          type="text"
-          id="searchInput"
-          placeholder="Search events..."
-          onkeyup="filterEvents()"
-        />
-        <input type="date" id="dateFilter" onchange="filterEvents()" />
-        <button onclick="clearFilters()">Clear Filters</button>
-      </div>
+        <!-- Alert Container -->
+        <div id="alertContainer" class="alert-container"></div>
 
-      <div id="eventsList" class="events-grid"></div>
+        <!-- Tabs and Filters -->
+        <div class="tabs-container">
+            <nav class="tabs-nav">
+                <button class="tab-btn active" data-tab="all">
+                    All Events <span class="tab-badge">0</span>
+                </button>
+                <button class="tab-btn" data-tab="upcoming">
+                    Upcoming <span class="tab-badge">0</span>
+                </button>
+                <button class="tab-btn" data-tab="registered">
+                    My Registrations <span class="tab-badge">0</span>
+                </button>
+            </nav>
+            <div class="filters">
+                <input 
+                    type="text" 
+                    id="searchInput" 
+                    class="search-input"
+                    placeholder="🔍 Search events..."
+                >
+            </div>
+        </div>
 
-      <div id="emptyState" class="empty-state" style="display: none">
-        <div class="empty-state-icon">🎉</div>
-        <h2>No events found</h2>
-        <p>Check back later for upcoming events!</p>
-      </div>
+        <!-- Events Grid -->
+        <div id="eventsGrid" class="events-grid">
+            <div class="loading" style="grid-column: 1 / -1;">
+                <div class="loading-spinner"></div>
+                <p>Loading events...</p>
+            </div>
+        </div>
     </div>
 
     <!-- Event Details Modal -->
-    <div id="eventModal" class="modal">
-      <div class="modal-content">
-        <span class="modal-close" onclick="closeModal()">&times;</span>
-        <div id="modalBody"></div>
-      </div>
+    <div id="eventModal" class="modal-overlay">
+        <div class="modal" id="modalContent">
+            <!-- Content populated by JavaScript -->
+        </div>
     </div>
 
-    <script src="../js/api.js"></script>
-    <script>
-      let allEvents = [];
-      let currentUserId = null;
-      let registeredEventIds = new Set();
-
-      document.addEventListener("DOMContentLoaded", function () {
-        checkAuth();
-        currentUserId = localStorage.getItem("userId");
-        loadEvents();
-      });
-
-      function checkAuth() {
-        const token = localStorage.getItem("token");
-        if (!token) {
-          window.location.href = "login.html";
-        }
-      }
-
-      async function loadEvents() {
-        try {
-          const response = await apiCall("/events/", { method: "GET" });
-          allEvents = response;
-          displayEvents(allEvents);
-        } catch (error) {
-          console.error("Failed to load events:", error);
-        }
-      }
-
-      function displayEvents(events) {
-        const eventsList = document.getElementById("eventsList");
-        const emptyState = document.getElementById("emptyState");
-
-        if (!events || events.length === 0) {
-          eventsList.innerHTML = "";
-          emptyState.style.display = "block";
-          return;
-        }
-
-        emptyState.style.display = "none";
-        eventsList.innerHTML = events
-          .map(
-            (event) => `
-                <div class="event-card">
-                    <div class="event-header">
-                        <div class="event-title">${
-                          event.title || "Untitled Event"
-                        }</div>
-                        <div class="event-date">📅 ${formatDate(
-                          event.eventDate
-                        )}</div>
-                    </div>
-                    <div class="event-body">
-                        <div class="event-description">${(
-                          event.description || ""
-                        ).substring(0, 100)}...</div>
-                        <div class="event-info">
-                            <div class="event-info-item">
-                                <span class="event-info-label">📍 Location:</span>
-                                <span class="event-info-value">${
-                                  event.location || "TBA"
-                                }</span>
-                            </div>
-                            <div class="event-info-item">
-                                <span class="event-info-label">👥 Capacity:</span>
-                                <span class="event-info-value">${
-                                  event.capacity || "N/A"
-                                }</span>
-                            </div>
-                            <div class="event-info-item">
-                                <span class="event-info-label">⏰ Time:</span>
-                                <span class="event-info-value">${
-                                  event.eventTime || "TBA"
-                                }</span>
-                            </div>
-                            <div class="event-info-item">
-                                <span class="event-info-label">📊 Status:</span>
-                                <span class="event-info-value">${
-                                  event.status || "Active"
-                                }</span>
-                            </div>
-                        </div>
-                        <div class="event-footer">
-                            <button class="btn btn-details" onclick="showEventDetails(${
-                              event.id
-                            })">View Details</button>
-                            <button class="btn ${
-                              isRegistered(event.id)
-                                ? "btn-registered"
-                                : "btn-register"
-                            }" 
-                                    onclick="toggleRegistration(${event.id}, '${
-              event.title
-            }')" 
-                                    id="btn-${event.id}">
-                                ${
-                                  isRegistered(event.id)
-                                    ? "✓ Registered"
-                                    : "Register"
-                                }
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            `
-          )
-          .join("");
-      }
-
-      function isRegistered(eventId) {
-        return registeredEventIds.has(eventId);
-      }
-
-      async function toggleRegistration(eventId, eventTitle) {
-        try {
-          if (isRegistered(eventId)) {
-            registeredEventIds.delete(eventId);
-          } else {
-            await apiCall(`/events/${eventId}/register`, { method: "POST" });
-            registeredEventIds.add(eventId);
-          }
-
-          const btn = document.getElementById(`btn-${eventId}`);
-          if (isRegistered(eventId)) {
-            btn.className = "btn btn-registered";
-            btn.textContent = "✓ Registered";
-          } else {
-            btn.className = "btn btn-register";
-            btn.textContent = "Register";
-          }
-        } catch (error) {
-          console.error("Failed to register for event:", error);
-          alert("Failed to register for event");
-        }
-      }
-
-      function showEventDetails(eventId) {
-        const event = allEvents.find((e) => e.id === eventId);
-        if (!event) return;
-
-        const modal = document.getElementById("eventModal");
-        const modalBody = document.getElementById("modalBody");
-
-        modalBody.innerHTML = `
-                <div class="modal-header">
-                    ${event.title}
-                    <span class="modal-close" onclick="closeModal()">&times;</span>
-                </div>
-                <div class="modal-text"><strong>Date:</strong> ${formatDate(
-                  event.eventDate
-                )}</div>
-                <div class="modal-text"><strong>Time:</strong> ${
-                  event.eventTime || "TBA"
-                }</div>
-                <div class="modal-text"><strong>Location:</strong> ${
-                  event.location || "TBA"
-                }</div>
-                <div class="modal-text"><strong>Capacity:</strong> ${
-                  event.capacity || "N/A"
-                }</div>
-                <div class="modal-text"><strong>Status:</strong> ${
-                  event.status || "Active"
-                }</div>
-                <div class="modal-text"><strong>Description:</strong></div>
-                <div class="modal-text">${
-                  event.description || "No description provided"
-                }</div>
-            `;
-
-        modal.classList.add("active");
-      }
-
-      function closeModal() {
-        document.getElementById("eventModal").classList.remove("active");
-      }
-
-      function filterEvents() {
-        const searchTerm = document
-          .getElementById("searchInput")
-          .value.toLowerCase();
-        const dateFilter = document.getElementById("dateFilter").value;
-
-        const filtered = allEvents.filter((event) => {
-          const matchesSearch =
-            !searchTerm ||
-            event.title?.toLowerCase().includes(searchTerm) ||
-            event.description?.toLowerCase().includes(searchTerm);
-
-          const matchesDate =
-            !dateFilter ||
-            (event.eventDate && event.eventDate.startsWith(dateFilter));
-
-          return matchesSearch && matchesDate;
-        });
-
-        displayEvents(filtered);
-      }
-
-      function clearFilters() {
-        document.getElementById("searchInput").value = "";
-        document.getElementById("dateFilter").value = "";
-        displayEvents(allEvents);
-      }
-
-      function formatDate(dateString) {
-        if (!dateString) return "N/A";
-        return new Date(dateString).toLocaleDateString("en-US", {
-          year: "numeric",
-          month: "short",
-          day: "numeric",
-        });
-      }
-
-      function goBack() {
-        const userRole = localStorage.getItem("userRole");
-        if (userRole === "STUDENT") {
-          window.location.href = "student-dashboard.html";
-        } else if (userRole === "ALUMNI") {
-          window.location.href = "alumni-dashboard.html";
-        } else {
-          window.location.href = "../index.html";
-        }
-      }
-
-      // Close modal on background click
-      window.onclick = function (event) {
-        const modal = document.getElementById("eventModal");
-        if (event.target === modal) {
-          modal.classList.remove("active");
-        }
-      };
-    </script>
-  </body>
+    <script src="../js/events.js"></script>
+</body>
 </html>
