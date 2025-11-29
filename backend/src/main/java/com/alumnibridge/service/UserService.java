@@ -20,7 +20,7 @@ public interface UserService {
     UserDto updateProfile(Long id, UserDto dto);
 
     // Search users
-    List<UserDto> searchUsers(String q, String degree, String institute, Integer batchYear);
+    List<UserDto> searchUsers(String q, String degree, String institute, Integer batchYear, String role);
 
     // Connection requests
     void sendConnectionRequest(Long senderId, Long receiverId);

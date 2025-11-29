@@ -1,8 +1,10 @@
 package com.alumnibridge.controller;
 
 import com.alumnibridge.dto.UserDto;
+import com.alumnibridge.exception.ResourceNotFoundException;
 import com.alumnibridge.service.UserService;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/users")
@@ -74,10 +77,11 @@ public class UserController {
             @RequestParam(required = false) String q,
             @RequestParam(required = false) String degree,
             @RequestParam(required = false) String institute,
-            @RequestParam(required = false) Integer batchYear) {
+            @RequestParam(required = false) Integer batchYear,
+            @RequestParam(required = false) String role) {
 
         return ResponseEntity.ok(
-                userService.searchUsers(q, degree, institute, batchYear)
+                userService.searchUsers(q, degree, institute, batchYear, role)
         );
     }
 
@@ -94,10 +98,21 @@ public class UserController {
             return ResponseEntity.status(401).body("Unauthorized");
         }
 
-        Long senderId = userService.getUserIdByEmail(userDetails.getUsername());
-        userService.sendConnectionRequest(senderId, receiverId);
-
-        return ResponseEntity.ok("Connection request sent");
+        try {
+            Long senderId = userService.getUserIdByEmail(userDetails.getUsername());
+            userService.sendConnectionRequest(senderId, receiverId);
+            return ResponseEntity.ok(Map.of("message", "Connection request sent"));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(Map.of("message", e.getMessage()));
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("message", e.getMessage()));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("message", "Error sending connection request", "details", e.getMessage()));
+        }
     }
 
     // ============================

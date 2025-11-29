@@ -24,11 +24,20 @@ public class Event {
 
     private String location;
     
+    private String organizer;
+    
+    @Column(columnDefinition = "LONGTEXT")
+    private String image;
+    
     private Integer capacity = 100;
+    
+    private Boolean isActive = true;
 
     @ManyToOne
     @JoinColumn(name="created_by")
     private User createdBy;
 
     private LocalDateTime createdAt = LocalDateTime.now();
+    
+    private LocalDateTime updatedAt = LocalDateTime.now();
 }

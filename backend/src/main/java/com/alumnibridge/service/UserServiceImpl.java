@@ -120,7 +120,7 @@ public class UserServiceImpl implements UserService {
     // SEARCH USERS
     // ============================
     @Override
-    public List<UserDto> searchUsers(String q, String degree, String institute, Integer batchYear) {
+    public List<UserDto> searchUsers(String q, String degree, String institute, Integer batchYear, String role) {
 
         List<User> users;
 
@@ -131,6 +131,19 @@ public class UserServiceImpl implements UserService {
         }
 
         return users.stream().filter(u -> {
+            // Filter by role if provided
+            if (role != null && !role.isBlank()) {
+                String[] roles = role.split(",");
+                boolean matchesRole = false;
+                for (String r : roles) {
+                    if (u.getRole().toString().equalsIgnoreCase(r.trim())) {
+                        matchesRole = true;
+                        break;
+                    }
+                }
+                if (!matchesRole) return false;
+            }
+
             Profile p = u.getProfile();
 
             if (degree != null && !degree.isBlank()) {
@@ -167,9 +180,27 @@ public class UserServiceImpl implements UserService {
         User receiver = userRepository.findById(receiverId)
                 .orElseThrow(() -> new ResourceNotFoundException("Receiver not found"));
 
-        connectionRepository.findBySenderAndReceiver(sender, receiver)
-                .ifPresent(cr -> {
-                    throw new IllegalArgumentException("Connection request already sent");
+        if (sender.getId().equals(receiver.getId())) {
+            throw new IllegalArgumentException("You cannot send a connection request to yourself");
+        }
+
+        connectionRepository.findConnectionBetweenUsers(sender, receiver)
+                .ifPresent(existing -> {
+                    switch (existing.getStatus()) {
+                        case PENDING:
+                            if (existing.getSender().equals(sender)) {
+                                throw new IllegalArgumentException("Connection request already sent");
+                            } else {
+                                throw new IllegalArgumentException("You already have a pending request from this user");
+                            }
+                        case ACCEPTED:
+                            throw new IllegalArgumentException("You are already connected with this user");
+                        case REJECTED:
+                            connectionRepository.delete(existing);
+                            break;
+                        default:
+                            connectionRepository.delete(existing);
+                    }
                 });
 
         ConnectionRequest cr = new ConnectionRequest();
@@ -208,6 +239,7 @@ public class UserServiceImpl implements UserService {
                     ConnectionRequestDto dto = new ConnectionRequestDto();
                     dto.setId(cr.getId());
                     dto.setSender(toDto(cr.getSender()));
+                    dto.setReceiver(toDto(cr.getReceiver()));
                     dto.setStatus(cr.getStatus().toString());
                     dto.setCreatedAt(cr.getCreatedAt() != null ? cr.getCreatedAt().toString() : null);
                     return dto;
@@ -314,7 +346,8 @@ public class UserServiceImpl implements UserService {
                 .map(cr -> {
                     ConnectionRequestDto dto = new ConnectionRequestDto();
                     dto.setId(cr.getId());
-                    dto.setSender(toDto(cr.getReceiver())); // Show receiver info
+                    dto.setSender(toDto(cr.getSender()));
+                    dto.setReceiver(toDto(cr.getReceiver()));
                     dto.setStatus(cr.getStatus().toString());
                     dto.setCreatedAt(cr.getCreatedAt() != null ? cr.getCreatedAt().toString() : null);
                     return dto;
@@ -326,6 +359,10 @@ public class UserServiceImpl implements UserService {
     // HELPER: Convert Entity → DTO
     // ============================
     private UserDto toDto(User u) {
+        if (u == null) {
+            return null;
+        }
+
         UserDto d = new UserDto();
 
         d.setId(u.getId());

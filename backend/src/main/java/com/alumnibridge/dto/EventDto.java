@@ -19,11 +19,21 @@ public class EventDto {
     private LocalTime eventTime;
     
     private String location;
+    private String organizer;
+    private String image;
     private Integer capacity;
     private Long createdBy;
+    private String createdByName;
+    private Boolean isActive = true;
+    
+    // Registration info
+    private Integer registrationCount;
+    private Boolean isRegistered;
     
     // Legacy fields for backward compatibility
     private LocalDateTime startAt;
     private LocalDateTime endAt;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }
 
